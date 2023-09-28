@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD//EN" 
+"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="models.plugin.PluginModel" table="Plugins" catalog="app">
+        <id name="id" type="java.lang.Long">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <property name="name" type="string">
+            <column name="name" length="100"/>
+        </property>
+        <property name="author" type="string">
+            <column name="author" length="100"/>
+        </property>
+        <property name="version" type="string">
+            <column name="version" length="50"/>
+        </property>
+        <property name="namespace" type="string">
+            <column name="namespace" length="100"/>
+        </property>
+        <property name="active" type="boolean">
+            <column name="active" />
+        </property>
+        <property name="prio" type="integer">
+            <column name="prio"/>
+        </property>
+        <property name="path" type="string">
+            <column name="path" length="200"/>
+        </property>
+    </class>
+</hibernate-mapping>
