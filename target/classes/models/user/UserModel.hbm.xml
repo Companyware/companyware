@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD//EN" 
+"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="models.user.UserModel" table="Users" catalog="app">
+        <id name="id" type="java.lang.Long">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <property name="name" type="string">
+            <column name="name" length="100"/>
+        </property>
+        <property name="username" type="string">
+            <column name="username" length="100"/>
+        </property>
+         <property name="password" type="string">
+            <column name="password" length="100"/>
+        </property>
+        <property name="active" type="boolean">
+            <column name="active" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,2 @@
+Tue Apr 14 01:14:47 CEST 2020 : Horchen auf Port 1527 auf Host 127.0.0.1 nicht möglich:
+ java.net.BindException: Address already in use: JVM_Bind
