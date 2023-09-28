@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD//EN" 
+"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.connection.driver_class">org.apache.derby.jdbc.ClientDriver</property>
+        <property name="connection.url">jdbc:derby://localhost:1527/companyware;create=true</property>
+        <property name="connection.username">app</property>
+        <property name="connection.password">ap</property>
+     
+        <!-- SQL dialect -->
+        <property name="dialect">org.hibernate.dialect.DerbyDialect</property>
+ 
+        <!-- Echo all executed SQL to stdout -->
+        <property name="show_sql">true</property>
+
+        <!-- Drop and re-create the database schema on startup -->
+       
+      	
+        <!--<property name="spring.jpa.properties.hibernate.globally_quoted_identifiers">true</property>-->
+        <!--<property name="mappingLocations">classpath:hibernate/*.hbm.xml</property>-->
+       
+     <!--   <mapping class="plugins.community.mbduscustomer.model.CustomerModel"></mapping>-->
+    </session-factory>
+</hibernate-configuration> 
