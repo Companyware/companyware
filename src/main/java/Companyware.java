@@ -12,7 +12,9 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.InetAddress;
+import java.net.URISyntaxException;
 import java.sql.SQLException;
 
 import javax.annotation.PreDestroy;
@@ -51,7 +53,17 @@ public class Companyware implements CommandLineRunner{
 			@Override
 			public void run() {
 				StartProgressBar progressBar = new StartProgressBar();
-				progressBar.initializeUI();
+				try {
+					try {
+						progressBar.initializeUI();
+					} catch (URISyntaxException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 	            progressBar.setVisible(true);
 			}
         });
