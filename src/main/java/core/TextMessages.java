@@ -32,7 +32,7 @@ public class TextMessages extends ReloadableResourceBundleMessageSource{
 		if(messageSource==null){
     		messageSource = new WildcardReloadableResourceBundleMessageSource();
     		String[] baseNames = org.springframework.util.StringUtils.commaDelimitedListToStringArray("classpath*:**/messages*");
-            messageSource.setBasenames(baseNames);
+    		messageSource.setBasenames(baseNames);
     	}
     	
     	String[] baseNames = org.springframework.util.StringUtils.commaDelimitedListToStringArray("classpath*:**/messages*");
