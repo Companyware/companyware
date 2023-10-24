@@ -21,6 +21,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.swing.JCheckBox;
+
 import plugins.core.plugins.model.DisplayAs;
 import models.pluginsettings.PluginSettingsModel;
 
