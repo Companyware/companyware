@@ -353,7 +353,7 @@ public class PluginManagerImpl implements PluginManager {
 				if(this.isJar){
 					String classpathEntry = System.getProperty("java.class.path");
 					
-				    if (classpathEntry.endsWith(".jar")) {
+				    if (classpathEntry.endsWith(".jar") || classpathEntry.endsWith(".exe") || classpathEntry.endsWith(".tgz")) {
 				    	pluginPath = pluginPath.replace("\\", "/");
 				    	jarFile = new File(classpathEntry);
 				    }
