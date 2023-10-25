@@ -15,18 +15,31 @@ package core;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLClassLoader;
+import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Stream;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 
 import models.plugin.PluginModel;
 import models.pluginsettings.PluginSettingsModel;
@@ -42,20 +55,31 @@ public class HibernateUtils {
     static {
         try {
         	Configuration config = new Configuration().configure("hibernate.cfg.xml");
-        	
-        	File file = new File("src/main/java");
-        	Files.walk(file.toPath())
-            .filter(path -> !Files.isDirectory(path))
-            .forEach(path -> {
-            	 if(path.toString().endsWith("hbm.xml")) {
-            		 String resourcePath = path.toString();
-            		 resourcePath = resourcePath.replace("src\\main\\java\\", "");
-            		 resourcePath = resourcePath.replace("src/main/java/", "");
-            		 config.addResource(resourcePath);
-            	 }
-            });
-        	String fileSeparator = FileSystems.getDefault().getSeparator();
-        	File installFile = new File("src"+fileSeparator+"main"+fileSeparator+"java"+fileSeparator+"install.lck");
+ 	        
+ 	        URL url = HibernateUtils.class.getResource("/");
+ 	        URI uri = null;
+ 			try {
+ 				if(url!=null){
+ 					uri = url.toURI();
+ 				}
+ 			} catch (URISyntaxException e) {
+ 				// TODO Auto-generated catch block
+ 				e.printStackTrace();
+ 			}
+ 	     
+ 			File file;
+ 			File installFile;
+ 			String fileSeparator = FileSystems.getDefault().getSeparator();
+ 			if (uri != null && uri.getScheme().equals("jar")) {
+ 				file = new File("classes");
+ 				installFile = new File("classes"+fileSeparator+"install.lck");
+ 			} 
+ 			else{
+ 				file = new File("src/main/java");
+ 				installFile = new File("src"+fileSeparator+"main"+fileSeparator+"java"+fileSeparator+"install.lck");
+ 			}
+ 			config.addDirectory(file);
+
             if(installFile.exists()){
 	        	config.setProperty("hibernate.hbm2ddl.auto", "none");
 	        	config.setProperty("hbm2ddl.auto", "none");	
@@ -69,6 +93,8 @@ public class HibernateUtils {
             sessionFactory = config.buildSessionFactory();
         } catch (Throwable ex) {
             System.err.println("Initial SessionFactory creation failed." + ex);
+            System.out.println(ex.getMessage());
+            System.out.println(ex.getStackTrace().toString());
             throw new ExceptionInInitializerError(ex);
         }
     }

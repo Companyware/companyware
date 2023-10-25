@@ -15,6 +15,7 @@
       <maven.compiler.source>1.8</maven.compiler.source>
       <maven.compiler.target>1.8</maven.compiler.target>
       <spring-version>5.1.6.RELEASE</spring-version>
+      <start-class>Companyware</start-class>
   </properties>
   
   <parent>
@@ -111,11 +112,35 @@
 			<version>1.0-rc3</version>
 		</dependency>
 		<dependency>
+        	<groupId>commons-io</groupId>
+        	<artifactId>commons-io</artifactId>
+        	<version>2.1</version>
+    	</dependency>
+		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>3.12.0</version>
 		</dependency>
+		<dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>1.7</version>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle.java</groupId>
+            <artifactId>jre</artifactId>
+            <classifier>win32</classifier>
+            <type>tgz</type>
+            <version>1.8.0_131</version>
+        </dependency>
   </dependencies>
+  <repositories>
+       <repository>
+           <!-- this repository has the JRE tgz -->
+           <id>alfresco</id>
+           <url>https://artifacts.alfresco.com/nexus/content/repositories/public/</url>
+       </repository>
+  </repositories>
   <build>
       <finalName>${project.artifactId}</finalName>
       <resources>
@@ -130,5 +155,95 @@
               <directory>src/main/resources</directory>
           </resource>
       </resources>
+      <plugins>
+            <plugin>
+        		<groupId>org.springframework.boot</groupId>
+        		<artifactId>spring-boot-maven-plugin</artifactId>
+        		<configuration>
+           			<fork>true</fork>
+            		<mainClass>${start-class}</mainClass>
+        		</configuration>
+          		<executions>
+            		<execution>
+              			<goals>
+                			<goal>repackage</goal>
+              			</goals>
+            		</execution>
+        		</executions>
+    		</plugin>
+	</plugins>
   </build>
+  
+  <profiles>
+        <profile>
+            <id>windows-exe</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                		<!-- this is to extract the JRE tgz file we downloaded -->
+                		<groupId>org.apache.maven.plugins</groupId>
+                		<artifactId>maven-dependency-plugin</artifactId>
+                		<version>2.5.1</version>
+                		<executions>
+                    		<execution>
+                        		<phase>generate-resources</phase>
+                        		<goals>
+                            		<goal>unpack-dependencies</goal>
+                        		</goals>
+                        		<configuration>
+                            		<includeGroupIds>com.oracle.java</includeGroupIds>
+                            		<includeTypes>tgz</includeTypes>
+                            		<includeArtifactIds>jre</includeArtifactIds>
+                            		<includeClassifiers>win32</includeClassifiers>
+                            		<outputDirectory>target/win32</outputDirectory>
+                        		</configuration>
+                    		</execution>
+                		</executions>
+            		</plugin>
+            		<plugin>
+                		<!-- This calls launch4j to create the program EXE -->
+                		<groupId>com.akathist.maven.plugins.launch4j</groupId>
+                		<artifactId>launch4j-maven-plugin</artifactId>
+                		<executions>
+                    		<execution>
+                        		<id>l4j-clui</id>
+                        		<phase>package</phase>
+                        		<goals>
+                            		<goal>launch4j</goal>
+                        		</goals>
+                        		<configuration>
+                            		<headerType>gui</headerType>
+                            		<outfile>target/Companyware.exe</outfile>
+                            		<jar>target/Companyware.jar</jar>
+                            		<errTitle>error</errTitle>
+                            		<classPath>                    
+   										<mainClass>org.springframework.boot.loader.JarLauncher</mainClass>                                
+   										<addDependencies>true</addDependencies>
+   										<preCp>anything</preCp>
+									</classPath>
+                            		<jre>
+                                		<path>./win32/java</path>
+                            		</jre>
+                            		<versionInfo>
+                                		<fileVersion>1.2.3.4</fileVersion>
+                                		<txtFileVersion>txt file version?</txtFileVersion>
+                                		<fileDescription>a description</fileDescription>
+                                		<copyright>my copyright</copyright>
+                                		<productVersion>4.3.2.1</productVersion>
+                                		<txtProductVersion>txt product version</txtProductVersion>
+                                		<productName>Companyware</productName>
+                                		<internalName>Companyware</internalName>
+                                		<originalFilename>Companyware.exe</originalFilename>
+                            		</versionInfo>
+                        		</configuration>
+                    		</execution>
+                		</executions>
+            		</plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
