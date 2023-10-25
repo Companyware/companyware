@@ -27,6 +27,8 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 
+import javassist.expr.Instanceof;
+
 public class WildcardReloadableResourceBundleMessageSource extends ReloadableResourceBundleMessageSource {
 
 	private ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
@@ -46,13 +48,20 @@ public class WildcardReloadableResourceBundleMessageSource extends ReloadableRes
 							Resource resource = resources[j];
 							String uri = resource.getURI().toString();
 							String baseName = null;
+	
 							if (resource instanceof FileSystemResource) {
 								baseName = "classpath:" + StringUtils.substringBetween(uri, "/classes/", ".properties");
 							} else if (resource instanceof ClassPathResource) {
 								baseName = StringUtils.substringBefore(uri, ".properties");
 							} else if (resource instanceof UrlResource) {
-								baseName = "classpath:" + StringUtils.substringBetween(uri, ".jar!/", ".properties");
+								if(uri.contains(".jar!")){
+									baseName = "classpath:" + StringUtils.substringBetween(uri, ".jar!/", ".properties");
+								}
+								if(uri.contains("classes!")){
+									baseName = "classpath:" + StringUtils.substringBetween(uri, "classes!/", ".properties");
+								}
 							}
+						
 							if (baseName != null) {
 								String fullName = processBasename(baseName);
 								baseNames.add(fullName);
