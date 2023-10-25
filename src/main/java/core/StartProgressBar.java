@@ -24,11 +24,18 @@ import javax.swing.border.Border;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.util.Locale;
+import java.util.Properties;
 import java.util.ResourceBundle;
 
 public class StartProgressBar extends JWindow{
@@ -39,7 +46,7 @@ public class StartProgressBar extends JWindow{
     private final int maxval = 100;
 
 
-    public void initializeUI() {
+    public void initializeUI() throws IOException, URISyntaxException {
     	try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException e) {
