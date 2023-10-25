@@ -16,19 +16,30 @@ package pluginmanager;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
+import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import java.util.jar.JarInputStream;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -38,6 +49,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
+import org.springframework.core.type.classreading.CachingMetadataReaderFactory;
+import org.springframework.core.type.classreading.MetadataReader;
+import org.springframework.core.type.classreading.MetadataReaderFactory;
+import org.springframework.util.ClassUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -60,6 +78,7 @@ public class PluginManagerImpl implements PluginManager {
 	private PluginClassLoader classLoader;
 	private List<String> loadedPlugins = new ArrayList<>();
 	private Map<String, Service> services = new HashMap<>();
+	private Boolean isJar = false;
 	private static final Log log = LogFactory.getLog(PluginManagerImpl.class);
 
 	public PluginManagerImpl(String pluginsDir) {
@@ -69,20 +88,80 @@ public class PluginManagerImpl implements PluginManager {
 
 	@Override
 	public void init() {
-		File dh = new File(this.pluginsDir);
-		List<String> listFiles = Arrays.asList(dh.list());
-		Collections.sort(listFiles,Collections.reverseOrder());
-		for (String pluginDir : listFiles){
-			if(pluginDir.equals("community") || pluginDir.equals("core")){
-				boolean core = pluginDir.equals("core")?true:false;
-				File pluginDirectory = new File(this.pluginsDir + System.getProperty("file.separator") + pluginDir); 
-				for (File plugin : pluginDirectory.listFiles()){
-					if(!plugin.getName().startsWith(".")){
-						initPlugin(plugin, core);
-					}
-				}
+	//	URL url = PluginManagerImpl.class.getResource("/resources");
+		URL url = getClass().getResource("/");
+
+        URI uri = null;
+		
+		
+		try {
+			if(url!=null){
+				uri = url.toURI();
 			}
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+        Path path;
+		if (uri != null && uri.getScheme().equals("jar")) {
+			this.isJar = true;
+        	this.pluginsDir = "classes/plugins";
+        	FileSystem fileSystem = null;
+			try {
+				fileSystem = FileSystems.newFileSystem(uri, Collections.<String, Object>emptyMap());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            path = fileSystem.getPath("/BOOT-INF/classes/plugins/");
+            Stream<Path> walk = null;
+			try {
+				walk = Files.walk(path,1);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            for (Iterator<Path> it = walk.iterator(); it.hasNext();){
+            	String filename = it.next().toString();
+                if(filename.contains("/core/") || filename.contains("community") ){
+                	boolean core = filename.contains("/core/")?true:false;
+                	
+                	Path pathPlugins = fileSystem.getPath(filename);
+                	try {
+						Files.walk(pathPlugins,1).forEach(pathP -> {
+							 File file = new File(pathP.toString());
+						
+						     if(!file.getName().startsWith(".") && !file.getName().endsWith("core") && !file.getName().endsWith("community")){
+						    	 initPlugin(file, core);
+						     }
+						});
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+                }
+            }
+        }
+        else{
+        	File dh = new File(this.pluginsDir);
+        
+            if(dh != null){ 
+    			List<String> listFiles = Arrays.asList(dh.list());
+    		
+    			Collections.sort(listFiles,Collections.reverseOrder());
+    			for (String pluginDir : listFiles){
+    				if(pluginDir.equals("community") || pluginDir.equals("core")){
+    					boolean core = pluginDir.equals("core")?true:false;
+    					File pluginDirectory = new File(this.pluginsDir + System.getProperty("file.separator") + pluginDir); 
+    					for (File plugin : pluginDirectory.listFiles()){
+    						if(!plugin.getName().startsWith(".")){
+    							initPlugin(plugin, core);
+    						}
+    					}
+    				}
+    			}
+            }
+        }
 		loadPlugins();
 	}
 	
@@ -110,37 +189,38 @@ public class PluginManagerImpl implements PluginManager {
 			String author = "";
 			Integer prio = null;
 			name = pluginNamespace;
-			
-			if(pluginConf != null){
-				version = pluginConf.get("version").toString();
-				author = pluginConf.get("author").toString();
-			
-				if(pluginConf.get("prio") != null){
-					prio = (Integer)pluginConf.get("prio");
+			if(!name.equals("Community") && !name.equals("Core")){
+				if(pluginConf != null){
+					version = pluginConf.get("version").toString();
+					author = pluginConf.get("author").toString();
+				
+					if(pluginConf.get("prio") != null){
+						prio = (Integer)pluginConf.get("prio");
+					}
 				}
-			}
 			
-			Query query= HibernateUtils.getSessionFactory().openSession().
-			        createQuery("from PluginModel where name=:name");
-			query.setParameter("name", name);
-			PluginModel pluginModel = (PluginModel) query.uniqueResult();
-			Long pluginId;
-		    if(pluginModel == null){
-		       	PluginModel newPlugin = new PluginModel();
-		       	newPlugin.setName(name);
-		       	newPlugin.setActive(core);
-		       	newPlugin.setNamespace(subdirectory);
-		       	newPlugin.setPath(pluginpath);
-		       	if(prio != null){
-		       		newPlugin.setPrio(prio);
-		       	}
-		       	Repository.save(newPlugin);
-		       	pluginId = newPlugin.getId();
-		    }
-		    else{
-		    	pluginId = pluginModel.getId();
-		    }
-		    this.readAndSaveXmlSettings(name, pluginId);
+				Query query= HibernateUtils.getSessionFactory().openSession().
+				        createQuery("from PluginModel where name=:name");
+				query.setParameter("name", name);
+				PluginModel pluginModel = (PluginModel) query.uniqueResult();
+				Long pluginId;
+			    if(pluginModel == null){
+			       	PluginModel newPlugin = new PluginModel();
+			       	newPlugin.setName(name);
+			       	newPlugin.setActive(core);
+			       	newPlugin.setNamespace(subdirectory);
+			       	newPlugin.setPath(pluginpath);
+			       	if(prio != null){
+			       		newPlugin.setPrio(prio);
+			       	}
+			       	Repository.save(newPlugin);
+			       	pluginId = newPlugin.getId();
+			    }
+			    else{
+			    	pluginId = pluginModel.getId();
+			    }
+			    this.readAndSaveXmlSettings(name, pluginId);
+			}
 		} catch (Exception ex) {
 			log.error("Exception in PluginManagerImp loadPlugins",ex);
 		}
@@ -224,6 +304,7 @@ public class PluginManagerImpl implements PluginManager {
 			plugins = query.list();
 			for (PluginModel plugin: plugins){
 				pluginPath = plugin.getPath();
+				pluginPath = pluginPath.replace(".", File.separator);
 				String subdirectory="";
 				if(pluginPath.contains("core")){
 					subdirectory="core";
@@ -231,21 +312,22 @@ public class PluginManagerImpl implements PluginManager {
 				else{
 					subdirectory = "community";
 				}
-				
-				File file = new File(pluginPath+".java");
+				File file = new File("classes"+File.separator+pluginPath+".class");
 				String pattern = Pattern.quote(System.getProperty("file.separator"));
 				String[] pathParts = file.getPath().split(pattern);
 				if(pathParts.length == 1){
 					pattern = Pattern.quote(".");
 					pathParts = file.getPath().split(pattern);
 				}
-				pluginpath = "plugins."+subdirectory+"."+pathParts[2]+"."+pathParts[2].substring(0, 1).toUpperCase() + pathParts[2].substring(1);
+			
+				pluginpath = "plugins."+subdirectory+"."+pathParts[3]+"."+pathParts[3].substring(0, 1).toUpperCase() + pathParts[3].substring(1);
 				String pluginNamespace = pathParts[2].substring(0, 1).toUpperCase() + pathParts[2].substring(1);
 				
 				if (loadedPlugins.contains(file.getAbsolutePath()))
 					continue;
-				classLoader.loadPlugin(file);
-					
+				if(!file.getAbsolutePath().endsWith("community") && !file.getAbsolutePath().endsWith("core")){
+					classLoader.loadPlugin(file);
+				}
 				Yaml yaml = new Yaml();
 	 			File yamlFile = new File(pluginPath+".yaml");
 	 			Map<String, String> pluginConf = null; 
@@ -267,9 +349,20 @@ public class PluginManagerImpl implements PluginManager {
 					}
 				}
 				
-				File jarFile = new File(pluginPath+".jar");
+				File jarFile = null;
+				if(this.isJar){
+					String classpathEntry = System.getProperty("java.class.path");
+					
+				    if (classpathEntry.endsWith(".jar") || classpathEntry.endsWith(".exe") || classpathEntry.endsWith(".tgz")) {
+				    	pluginPath = pluginPath.replace("\\", "/");
+				    	jarFile = new File(classpathEntry);
+				    }
+				}
+				else{
+					jarFile = new File(pluginPath+".jar");
+				}
 				Class<?> pluginClass = null;
-				if(jarFile.exists()){
+				if(jarFile.exists() || this.isJar){
 					ClassLoader classLoader = URLClassLoader.newInstance(
 			            new URL[] { jarFile.toURI().toURL() },
 			            getClass().getClassLoader()
