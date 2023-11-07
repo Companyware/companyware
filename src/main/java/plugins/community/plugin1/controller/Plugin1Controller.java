@@ -42,7 +42,7 @@ public class Plugin1Controller implements ActionListener, Service{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		log.info("test action plugin1");
-		this.model.printOut("ACTION: " + e.getActionCommand().toString());
+		this.model.printOut("ACTION plugin1: " + e.getActionCommand().toString());
 		switch(e.getActionCommand().toString()) {
 	    case "Plugin1":
 	    	{
