@@ -11,46 +11,45 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
-package plugins.core.plugins.controller;
+package plugins.community.companywaredemo.view;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.Observable;
+import java.util.Observer;
+
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import plugins.core.plugins.model.*;
-import pluginmanager.PluginManagerImpl;
 import pluginmanager.plugininterfaces.PluginManager;
-import pluginmanager.plugininterfaces.Service;
-import plugins.core.plugins.view.Plugins;
+import plugins.community.companywaredemo.controller.CompanywaredemoController;
+import plugins.core.menu.view.Menu;
 
-public class PluginsController implements ActionListener, Service{
-
-	private static final Log log = LogFactory.getLog(PluginsController.class);
-	private PluginsModel model;
-	private Plugins view;
+public class CompanywaredemoView  implements Observer {
+	private static final Log log = LogFactory.getLog(CompanywaredemoView.class);
 	
-	public PluginsController(PluginManager pm) {
-		this.model = new PluginsModel();
-		pm.registerService("PluginsController",this);
-		view = new Plugins(pm);
-		model.addObserver(view);
+	private PluginManager pm;
+	
+	public CompanywaredemoView(PluginManager pm) {
+		this.pm = pm;
+		this.createMenuEntry();
 	}
-
+	
+	/**
+	 * create menu entry "Companywaredemo"
+	 */
+	public void createMenuEntry(){
+		CompanywaredemoController companywaredemoController = (CompanywaredemoController)pm.getService("CompanywaredemoController");
+		Menu menuView = (Menu)pm.getService("MenuView");
+		JMenu settings = menuView.getSettings();
+		JMenuItem companywaredemo = new JMenuItem("Companywaredemo");
+        companywaredemo.addActionListener(companywaredemoController);
+        settings.add(companywaredemo);
+	}
+	
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		log.info("test action pluginscontroller");
-		this.model.printOut("ACTION pluginscontroller: " + e.getActionCommand().toString());
-		switch(e.getActionCommand().toString()) {
-	    case "Pluginmanager":
-	    	{
-	    		this.createPluginManagerOverview();
-	    	}
-		}
-	}
-	
-	public void createPluginManagerOverview(){
-		view.createTableOverview();
+	public void update(Observable arg0, Object arg1) {
+		// TODO Auto-generated method stub
 	}
 }

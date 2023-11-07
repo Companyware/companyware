@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<Settings>
+	<Setting>
+		<type>Integer</type>
+		<name>Test</name>
+		<value>Test1</value>
+	</Setting>
+	<Setting>
+		<type>Integer</type>
+		<name>Test2</name>
+		<value>Test2</value>
+	</Setting>
+	<Setting>
+		<type>String</type>
+		<name>Teststring</name>
+		<value>string value</value>
+	</Setting>
+	<Setting>
+		<type>Boolean</type>
+		<name>Testboolean</name>
+		<value>boolean value</value>
+	</Setting>
+</Settings>
