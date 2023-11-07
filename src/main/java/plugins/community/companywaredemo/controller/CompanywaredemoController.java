@@ -11,7 +11,7 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
-package plugins.core.plugins.controller;
+package plugins.community.companywaredemo.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,38 +19,34 @@ import java.awt.event.ActionListener;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import plugins.community.companywaredemo.view.CompanywaredemoView;
 import plugins.core.plugins.model.*;
 import pluginmanager.PluginManagerImpl;
 import pluginmanager.plugininterfaces.PluginManager;
 import pluginmanager.plugininterfaces.Service;
 import plugins.core.plugins.view.Plugins;
 
-public class PluginsController implements ActionListener, Service{
+public class CompanywaredemoController implements ActionListener, Service{
 
-	private static final Log log = LogFactory.getLog(PluginsController.class);
+	private static final Log log = LogFactory.getLog(CompanywaredemoController.class);
 	private PluginsModel model;
-	private Plugins view;
+	private CompanywaredemoView view;
 	
-	public PluginsController(PluginManager pm) {
+	public CompanywaredemoController(PluginManager pm) {
 		this.model = new PluginsModel();
-		pm.registerService("PluginsController",this);
-		view = new Plugins(pm);
+		pm.registerService("CompanywaredemoController",this);
+		view = new CompanywaredemoView(pm);
 		model.addObserver(view);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		log.info("test action pluginscontroller");
-		this.model.printOut("ACTION pluginscontroller: " + e.getActionCommand().toString());
+		this.model.printOut("ACTION: " + e.getActionCommand().toString());
 		switch(e.getActionCommand().toString()) {
-	    case "Pluginmanager":
+	    case "Companywaredemo":
 	    	{
-	    		this.createPluginManagerOverview();
+	    		log.info("Cmmand Companywaredemo");
 	    	}
 		}
-	}
-	
-	public void createPluginManagerOverview(){
-		view.createTableOverview();
 	}
 }
