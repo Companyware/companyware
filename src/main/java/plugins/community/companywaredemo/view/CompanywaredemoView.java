@@ -11,24 +11,45 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
-package plugins.community.plugin1;
+package plugins.community.companywaredemo.view;
+
+import java.util.Observable;
+import java.util.Observer;
+
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import pluginmanager.plugininterfaces.Service;
+import pluginmanager.plugininterfaces.PluginManager;
+import plugins.community.companywaredemo.controller.CompanywaredemoController;
 import plugins.core.menu.view.Menu;
 
-public class TestService implements Service {
+public class CompanywaredemoView  implements Observer {
+	private static final Log log = LogFactory.getLog(CompanywaredemoView.class);
 	
-	private static final Log log = LogFactory.getLog(Menu.class);
-
-	public TestService(){
-		log.info("constructor");
+	private PluginManager pm;
+	
+	public CompanywaredemoView(PluginManager pm) {
+		this.pm = pm;
+		this.createMenuEntry();
 	}
 	
-	public void testFunction() {
-		log.info("Hello World from TestFunction not jar!");
+	/**
+	 * create menu entry "Companywaredemo"
+	 */
+	public void createMenuEntry(){
+		CompanywaredemoController companywaredemoController = (CompanywaredemoController)pm.getService("CompanywaredemoController");
+		Menu menuView = (Menu)pm.getService("MenuView");
+		JMenu settings = menuView.getSettings();
+		JMenuItem companywaredemo = new JMenuItem("Companywaredemo");
+        companywaredemo.addActionListener(companywaredemoController);
+        settings.add(companywaredemo);
 	}
-
+	
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		// TODO Auto-generated method stub
+	}
 }
