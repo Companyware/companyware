@@ -20,7 +20,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import plugins.core.menu.view.Menu;
-import plugins.community.plugin1.TestService;
 
 import pluginmanager.plugininterfaces.ActionProcessor;
 import pluginmanager.plugininterfaces.Plugin;
@@ -29,7 +28,7 @@ import plugins.community.companywaredemo.controller.CompanywaredemoController;
 
 public class Companywaredemo implements Plugin {
 	
-	private static final Log log = LogFactory.getLog(Menu.class);
+	private static final Log log = LogFactory.getLog(Companywaredemo.class);
 
 	@Override
 	public void init(PluginManager pm) {
