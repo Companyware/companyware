@@ -11,7 +11,7 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
-package plugins.community.plugin1;
+package plugins.community.companywaredemo;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,36 +20,34 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import plugins.core.menu.view.Menu;
-import plugins.community.plugin1.TestService;
 
 import pluginmanager.plugininterfaces.ActionProcessor;
 import pluginmanager.plugininterfaces.Plugin;
 import pluginmanager.plugininterfaces.PluginManager;
-import plugins.community.plugin1.controller.Plugin1Controller;
+import plugins.community.companywaredemo.controller.CompanywaredemoController;
 
-public class Plugin1 implements Plugin {
+public class Companywaredemo implements Plugin {
 	
-	private static final Log log = LogFactory.getLog(Menu.class);
+	private static final Log log = LogFactory.getLog(Companywaredemo.class);
 
 	@Override
 	public void init(PluginManager pm) {
-		log.info("plugin1 initialized in package java class!");
+		log.info("Companywaredemo initialized in package java class!");
 	
-		pm.registerService("plugin1Controller", new Plugin1Controller(pm));
+		pm.registerService("CompanywaredemoController", new CompanywaredemoController(pm));
 		// service test
 		pm.registerService("testService", new TestService());
 		TestService testService = (TestService) pm.getService("testService");
 		testService.testFunction();
 		
 		// action test
-		pm.addActionProcessor("test_hook", new ActionProcessor() {
+		pm.addActionProcessor("test_hook_companywaredemo", new ActionProcessor() {
 			
 			@Override
 			public void call(Map<String, Object> context) {
-				log.info("Test hook called!");
+				log.info("Test hook in Companywaredemo called!");
 			}
-			
 		});
-		pm.callAction("test_action", new HashMap<String, Object>());
+		pm.callAction("test_hook_companywaredemo", new HashMap<String, Object>());
 	}
 }
