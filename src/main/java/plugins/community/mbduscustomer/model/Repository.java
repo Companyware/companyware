@@ -14,21 +14,13 @@
 package plugins.community.mbduscustomer.model;
 
 import java.util.List;
-
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.ParameterExpression;
 import javax.persistence.criteria.Root;
-
-import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
-import org.hibernate.query.Query;
-
 import core.HibernateUtils;
-import models.pluginsettings.PluginSettingsModel;
-import models.user.UserModel;
 
 public class Repository {
     

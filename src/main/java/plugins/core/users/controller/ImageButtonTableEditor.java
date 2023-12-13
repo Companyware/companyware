@@ -13,51 +13,29 @@
  *******************************************************************************/
 package plugins.core.users.controller;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
-import java.beans.PropertyVetoException;
-import java.util.List;
-
 import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
 import javax.swing.DefaultCellEditor;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JDesktopPane;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JInternalFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTable;
-import javax.swing.UIManager;
-import javax.swing.plaf.basic.BasicInternalFrameUI;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.w3c.dom.*;
-import org.xml.sax.SAXException;
-
-import javax.xml.parsers.*;
 import java.io.*;
 import java.net.URL;
-
 import pluginmanager.plugininterfaces.PluginManager;
 import plugins.core.users.view.WhiteButton;
 
 public class ImageButtonTableEditor extends DefaultCellEditor{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private static final Log log = LogFactory.getLog(ImageButtonTableEditor.class);
 	
 	private JButton button;
@@ -73,7 +51,7 @@ public class ImageButtonTableEditor extends DefaultCellEditor{
 		super(checkBox);
 		this.pm = pm;
 		button = new WhiteButton();
-		URL url = getClass().getResource("/delete.png");
+		URL url = getClass().getResource("/delete2.png");
     	BufferedImage img = null;
 		try {
 			img = ImageIO.read(url);

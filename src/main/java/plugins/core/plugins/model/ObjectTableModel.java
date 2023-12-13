@@ -14,14 +14,16 @@
 package plugins.core.plugins.model;
 
 import javax.swing.table.AbstractTableModel;
-
 import plugins.core.plugins.interfaces.Editable;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class ObjectTableModel<T> extends AbstractTableModel {
-    private List<T> objectRows = new ArrayList<>();
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private List<T> objectRows = new ArrayList<>();
 
     public List<T> getObjectRows() {
         return objectRows;

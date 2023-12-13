@@ -17,8 +17,6 @@ import plugins.core.plugins.controller.PluginsController;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import pluginmanager.PluginManagerImpl;
 import pluginmanager.plugininterfaces.Plugin;
 import pluginmanager.plugininterfaces.PluginManager;
 

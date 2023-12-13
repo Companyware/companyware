@@ -14,21 +14,15 @@
 package plugins.core.menu.view;
 
 import java.awt.BorderLayout;
-import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
-
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.context.support.ResourceBundleMessageSource;
-
 import core.ApplicationContextProvider;
 import core.TextMessages;
-import pluginmanager.PluginManagerImpl;
 import pluginmanager.plugininterfaces.PluginManager;
 import pluginmanager.plugininterfaces.Service;
 import plugins.core.frame.controller.FrameController;

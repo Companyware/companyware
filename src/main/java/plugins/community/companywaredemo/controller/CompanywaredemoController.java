@@ -21,10 +21,8 @@ import org.apache.commons.logging.LogFactory;
 
 import plugins.community.companywaredemo.view.CompanywaredemoView;
 import plugins.core.plugins.model.*;
-import pluginmanager.PluginManagerImpl;
 import pluginmanager.plugininterfaces.PluginManager;
 import pluginmanager.plugininterfaces.Service;
-import plugins.core.plugins.view.Plugins;
 
 public class CompanywaredemoController implements ActionListener, Service{
 
@@ -46,7 +44,12 @@ public class CompanywaredemoController implements ActionListener, Service{
 	    case "Companywaredemo":
 	    	{
 	    		log.info("Cmmand Companywaredemo");
+	    		this.createDemoUsersOverview();
 	    	}
 		}
+	}
+	
+	public void createDemoUsersOverview(){
+		view.createTableOverview();
 	}
 }
