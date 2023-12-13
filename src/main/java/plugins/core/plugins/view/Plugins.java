@@ -18,10 +18,14 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -32,10 +36,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.TableCellRenderer;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import core.ApplicationContextProvider;
 import core.TextMessages;
 import models.plugin.PluginModel;
@@ -49,6 +51,8 @@ import plugins.core.plugins.controller.CheckboxCellEditor;
 import plugins.core.plugins.controller.PluginsController;
 import plugins.core.plugins.model.DisplayableObjectTableModel;
 import plugins.core.plugins.model.ObjectTableModel;
+import plugins.core.users.view.ButtonColumnRenderer;
+import plugins.core.users.view.ImageButtonColumnRenderer;
 import plugins.core.plugins.controller.ImageButtonTableEditor;
 
 public class Plugins  implements Observer {
@@ -82,10 +86,29 @@ public class Plugins  implements Observer {
 		Frame frame = frameController.getView();
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.setPreferredSize(new Dimension(frame.getWidth()+frame.getConstCenterWidth()-50,frame.getHeight()+frame.getConstCenterHeight()-100));
-        JLabel label = new JLabel("Pluginmanager",SwingConstants.CENTER);
+		JButton fileButton = new JButton("Plugin installieren");
+		URL url = getClass().getResource("/upload3.png");
+    	BufferedImage img = null;
+		try {
+			img = ImageIO.read(url);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	ImageIcon icon = new ImageIcon(img);
+		fileButton.setIcon(icon);
+		fileButton.setPreferredSize(new Dimension(200,50));
+		fileButton.setActionCommand("installPlugin");
+	    fileButton.addActionListener(pluginsController);
+		JLabel label = new JLabel("Pluginmanager",SwingConstants.CENTER);
         label.setPreferredSize(new Dimension(frame.getWidth()+frame.getConstCenterWidth()-50,50));
         label.setFont(new Font(label.getFont().getName(), Font.BOLD, 20));
-        panel.add(label,BorderLayout.NORTH);
+        JPanel filePanel = new JPanel(new BorderLayout());
+        JPanel layoutPanel = new JPanel(new BorderLayout());
+        filePanel.add(fileButton, BorderLayout.EAST);
+        layoutPanel.add(filePanel, BorderLayout.NORTH);
+        layoutPanel.add(label,BorderLayout.SOUTH);
+        panel.add(layoutPanel,BorderLayout.NORTH);
         List<PluginModel> plugins=Repository.getCommunityPlugins();
         
         ObjectTableModel<PluginModel> tableModel = new DisplayableObjectTableModel<>(PluginModel.class);
@@ -108,7 +131,8 @@ public class Plugins  implements Observer {
 	    table.setDefaultRenderer(Object.class, new ObjectColumnRenderer());
 	    table.setDefaultRenderer(Integer.class, new IntegerColumnRenderer());
         table.setDefaultRenderer(Boolean.class, new CheckboxColumnRenderer());
-        table.setDefaultRenderer(JCheckBox.class, new ImageButtonColumnRenderer("Edit"));
+        table.setDefaultRenderer(JCheckBox.class, new ButtonColumnRenderer("Edit"));
+        table.setDefaultRenderer(JButton.class, new ImageButtonColumnRenderer("Delete"));
 
         JCheckBox imageButton = new JCheckBox();
         imageButton.setActionCommand("edit");

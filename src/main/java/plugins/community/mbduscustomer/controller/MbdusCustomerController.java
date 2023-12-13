@@ -14,7 +14,6 @@
 package plugins.community.mbduscustomer.controller;
 
 import java.awt.Cursor;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -23,22 +22,16 @@ import java.util.Observable;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import core.Companyware;
-import models.plugin.PluginModel;
 import pluginmanager.plugininterfaces.PluginManager;
 import pluginmanager.plugininterfaces.Service;
 import plugins.community.mbduscustomer.model.CustomerModel;
 import plugins.community.mbduscustomer.model.Repository;
 import plugins.community.mbduscustomer.view.MbdusCustomerView;
-import plugins.core.frame.controller.FrameController;
-import plugins.core.frame.view.Frame;
-import plugins.core.plugins.model.PluginsModel;
 
 public class MbdusCustomerController extends Observable implements Service, MouseListener, ActionListener{
 	private static final Log log = LogFactory.getLog(MbdusCustomerController.class);
