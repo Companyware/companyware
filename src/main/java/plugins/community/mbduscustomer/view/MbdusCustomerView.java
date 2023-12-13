@@ -42,7 +42,7 @@ import plugins.community.mbduscustomer.model.Repository;
 import plugins.community.mbduscustomer.model.CustomerModel;
 import pluginmanager.plugininterfaces.PluginManager;
 import plugins.community.mbduscustomer.controller.MbdusCustomerController;
-import plugins.community.plugin1.view.Plugin1View;
+import plugins.community.mbduscustomer.view.MbdusCustomerView;
 import plugins.core.frame.controller.FrameController;
 import plugins.core.frame.view.Frame;
 import plugins.core.frame.view.JOutlookBar;
@@ -58,7 +58,7 @@ import plugins.core.users.view.IntegerColumnRenderer;
 import plugins.core.users.view.ObjectColumnRenderer;
 
 public class MbdusCustomerView implements Observer{
-	private static final Log log = LogFactory.getLog(Plugin1View.class);
+	private static final Log log = LogFactory.getLog(MbdusCustomerView.class);
 	
 	private PluginManager pm;
 	private static final Insets WEST_INSETS = new Insets(5, 0, 5, 5);
