@@ -15,14 +15,14 @@ package plugins.community.companywaredemo.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import plugins.community.companywaredemo.view.CompanywaredemoView;
 import plugins.core.plugins.model.*;
 import pluginmanager.plugininterfaces.PluginManager;
 import pluginmanager.plugininterfaces.Service;
+import pluginmanager.PluginManagerImpl;
+import plugins.core.plugins.view.Plugins;
 
 public class CompanywaredemoController implements ActionListener, Service{
 

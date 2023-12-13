@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 Wed Dec 13 10:18:24 CET 2023 Thread[main,5,main] Ignored duplicate property derby.module.replication.master in jar:file:/C:/Users/user/.m2/repository/org/apache/derby/derby/10.14.2.0/derby-10.14.2.0.jar!/org/apache/derby/modules.properties
 Wed Dec 13 10:18:24 CET 2023 Thread[main,5,main] Ignored duplicate property derby.module.resultSetStatisticsFactory in jar:file:/C:/Users/user/.m2/repository/org/apache/derby/derby/10.14.2.0/derby-10.14.2.0.jar!/org/apache/derby/modules.properties
 Wed Dec 13 10:18:24 CET 2023 Thread[main,5,main] Ignored duplicate property derby.module.NoneAuthentication in jar:file:/C:/Users/user/.m2/repository/org/apache/derby/derby/10.14.2.0/derby-10.14.2.0.jar!/org/apache/derby/modules.properties
@@ -63,6 +64,8 @@ Wed Dec 13 10:18:24 CET 2023 Thread[main,5,main]                                
 Wed Dec 13 10:18:24 CET 2023 : Apache Derby Network Server 10.12.1.1 - (1704137) wurde gestartet und ist bereit, Verbindungen auf Port 1527 zu akzeptieren.
 =======
 >>>>>>> refs/remotes/origin/main
+=======
+>>>>>>> b12888c6dd4376ebb082a26ebe01abcf91f519c7
 =======
 <<<<<<< HEAD
 Wed Nov 15 13:13:08 CET 2023 Thread[main,5,main] Ignored duplicate property derby.module.replication.master in jar:file:/C:/Users/user/.m2/repository/org/apache/derby/derby/10.14.2.0/derby-10.14.2.0.jar!/org/apache/derby/modules.properties
@@ -323,6 +326,7 @@ Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 
 >>>>>>> refs/remotes/origin/main
 >>>>>>> branch 'develop' of ssh://git@git.mbdus.de:22/companyware.git
 >>>>>>> branch 'develop' of ssh://git@git.mbdus.de:22/companyware.git
+<<<<<<< HEAD
 >>>>>>> branch 'develop' of ssh://git@git.mbdus.de:22/companyware.git
 ----------------------------------------------------------------
 <<<<<<< HEAD
@@ -330,6 +334,10 @@ Wed Dec 13 10:18:28 CET 2023:
 Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance a816c00e-018c-6278-5e2c-0000009ad3b0 
 =======
 <<<<<<< HEAD
+=======
+----------------------------------------------------------------
+<<<<<<< HEAD
+>>>>>>> b12888c6dd4376ebb082a26ebe01abcf91f519c7
 Wed Nov 15 13:13:12 CET 2023:
 Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance a816c00e-018b-d2e6-468f-0000009a8900 
 =======
@@ -347,10 +355,14 @@ Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 
 >>>>>>> branch 'develop' of ssh://git@git.mbdus.de:22/companyware.git
 >>>>>>> branch 'develop' of ssh://git@git.mbdus.de:22/companyware.git
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> branch 'develop' of ssh://git@git.mbdus.de:22/companyware.git
 =======
 >>>>>>> Development/develop
 >>>>>>> refs/remotes/origin/main
+=======
+>>>>>>> Development/develop
+>>>>>>> b12888c6dd4376ebb082a26ebe01abcf91f519c7
 on database directory D:\companyware-desktop\CompanywareDesktop\companyware with class loader sun.misc.Launcher$AppClassLoader@1d16e93 
 Loaded from file:/D:/companyware-desktop/CompanywareDesktop/lib/derby.jar
 java.vendor=Oracle Corporation
