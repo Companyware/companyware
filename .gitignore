@@ -2,3 +2,5 @@
 /companyware/
 Companyware_with_Sources.zip./.git/objects/pack/pack-ecc68bf605135aff8c5c450030a974c80e4e1713.pack
 /derby.log
+/src/main/java/install.lck
+/classes/install.lck
