@@ -80,15 +80,15 @@ public class HibernateUtils {
  			}
  			config.addDirectory(file);
 
-            if(installFile.exists()){
-	        	config.setProperty("hibernate.hbm2ddl.auto", "none");
-	        	config.setProperty("hbm2ddl.auto", "none");	
-            }
-            else{
+//            if(installFile.exists()){
+//	        	config.setProperty("hibernate.hbm2ddl.auto", "none");
+//	        	config.setProperty("hbm2ddl.auto", "none");	
+//            }
+//            else{
             	FileOutputStream s = new FileOutputStream(installFile,false);
             	config.setProperty("hibernate.hbm2ddl.auto", "update");
 	        	config.setProperty("hbm2ddl.auto", "update");	
-            }
+     //       }
        // 	config.setProperty("hbm2ddl.import_files", "tables.sql");
             sessionFactory = config.buildSessionFactory();
         } catch (Throwable ex) {
