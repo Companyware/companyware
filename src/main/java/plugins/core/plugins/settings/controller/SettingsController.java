@@ -13,10 +13,7 @@
  *******************************************************************************/
 package plugins.core.plugins.settings.controller;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,32 +21,22 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.util.List;
-import java.util.Observer;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import javax.xml.parsers.ParserConfigurationException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.xml.sax.SAXException;
-
 import core.Companyware;
 import models.pluginsettings.Repository;
 import models.pluginsettings.PluginSettingsModel;
 import plugins.core.frame.controller.FrameController;
-import plugins.core.frame.view.Frame;
-import plugins.core.plugins.model.*;
 import plugins.core.plugins.settings.model.SettingsModel;
 import plugins.core.plugins.settings.view.SettingsDialog;
-import pluginmanager.PluginManagerImpl;
 import pluginmanager.plugininterfaces.PluginManager;
 import pluginmanager.plugininterfaces.Service;
-import plugins.core.plugins.view.Plugins;
 
 public class SettingsController implements ActionListener, Service, WindowListener{
 

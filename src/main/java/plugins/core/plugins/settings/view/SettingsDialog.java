@@ -14,19 +14,13 @@
 package plugins.core.plugins.settings.view;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.TextField;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -34,16 +28,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import core.ApplicationContextProvider;
-import core.Companyware;
 import core.TextMessages;
 import models.pluginsettings.PluginSettingsModel;
 import pluginmanager.plugininterfaces.PluginManager;
-import plugins.core.frame.controller.FrameController;
 import plugins.core.plugins.settings.controller.SettingsController;
 
 public class SettingsDialog extends JDialog implements Observer{ 	
