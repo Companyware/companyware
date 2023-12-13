@@ -19,18 +19,11 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import core.Companyware;
-import models.plugin.PluginModel;
-import models.plugin.Repository;
-
 import java.awt.FlowLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-
 import pluginmanager.plugininterfaces.PluginManager;
 import plugins.core.frame.controller.FrameController;
 

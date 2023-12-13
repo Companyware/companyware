@@ -15,7 +15,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URISyntaxException;
-import java.sql.SQLException;
 import javax.annotation.PreDestroy;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -26,7 +25,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
-
 import core.ApplicationContextProvider;
 import core.HibernateUtils;
 import core.StartProgressBar;

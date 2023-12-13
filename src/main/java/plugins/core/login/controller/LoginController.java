@@ -13,39 +13,24 @@
  *******************************************************************************/
 package plugins.core.login.controller;
 
-import java.awt.Component;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import core.Companyware;
-import models.pluginsettings.Repository;
 import models.user.UserModel;
-import models.pluginsettings.PluginSettingsModel;
 import pluginmanager.plugininterfaces.PluginManager;
 import pluginmanager.plugininterfaces.Service;
 import plugins.core.frame.controller.FrameController;
 import plugins.core.frame.view.Frame;
 import plugins.core.login.view.LoginView;
-import plugins.core.plugins.settings.controller.SettingsController;
 
 public class LoginController implements ActionListener, Service, WindowListener, KeyListener{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	private static final Log log = LogFactory.getLog(LoginController.class);
 	private LoginView view; 
 	private FrameController frameController;

@@ -13,16 +13,9 @@
  *******************************************************************************/
 package plugins.core.plugins.settings;
 
-import plugins.core.frame.controller.FrameController;
-import plugins.core.frame.view.Frame;
 import plugins.core.plugins.settings.controller.SettingsController;
-
-import javax.swing.JFrame;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import pluginmanager.PluginManagerImpl;
 import pluginmanager.plugininterfaces.Plugin;
 import pluginmanager.plugininterfaces.PluginManager;
 

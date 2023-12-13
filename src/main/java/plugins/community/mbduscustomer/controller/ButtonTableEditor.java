@@ -13,54 +13,24 @@
  *******************************************************************************/
 package plugins.community.mbduscustomer.controller;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseMotionListener;
-import java.beans.PropertyVetoException;
-import java.util.List;
-
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JDesktopPane;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JInternalFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTable;
-import javax.swing.UIManager;
-import javax.swing.plaf.basic.BasicInternalFrameUI;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.w3c.dom.*;
-import org.xml.sax.SAXException;
-
-import javax.xml.parsers.*;
-import java.io.*;
-
-import models.plugin.PluginModel;
 import pluginmanager.plugininterfaces.PluginManager;
-import plugins.core.frame.controller.FrameController;
-import plugins.core.frame.view.Frame;
-import plugins.core.plugins.model.ObjectTableModel;
-import plugins.core.plugins.settings.Settings;
-import plugins.core.plugins.settings.controller.SettingsController;
-import plugins.core.plugins.settings.view.SettingsDialog;
-import plugins.core.plugins.view.Plugins;
 import plugins.core.plugins.view.WhiteButton;
 
 public class ButtonTableEditor extends DefaultCellEditor{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private static final Log log = LogFactory.getLog(ButtonTableEditor.class);
 	
 	private JButton button;
@@ -77,7 +47,7 @@ public class ButtonTableEditor extends DefaultCellEditor{
 		button = new WhiteButton();
 		button.setBackground(Color.white);
 		button.setBorderPainted(false);
-		button.setActionCommand("button renderer customer");
+		button.setActionCommand("button renderer");
 		button.addActionListener(new ActionListener()
 		{
 			@Override

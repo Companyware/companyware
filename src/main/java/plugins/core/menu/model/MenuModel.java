@@ -14,11 +14,8 @@
 package plugins.core.menu.model;
 
 import java.util.Observable;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import pluginmanager.PluginManagerImpl;
 
 public class MenuModel extends Observable{
 	
