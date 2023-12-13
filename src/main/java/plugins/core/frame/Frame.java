@@ -14,10 +14,8 @@
 package plugins.core.frame;
 
 import plugins.core.frame.controller.FrameController;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import pluginmanager.plugininterfaces.Plugin;
 import pluginmanager.plugininterfaces.PluginManager;
 

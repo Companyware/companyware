@@ -20,6 +20,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 
 import plugins.core.plugins.model.DisplayAs;
@@ -42,6 +43,7 @@ public class PluginModel {
     private JCheckBox action;
     private Integer prio;
     private String path;
+    private JButton button;
     
     private Set<PluginSettingsModel> pluginsettings;
 	
@@ -125,6 +127,15 @@ public class PluginModel {
     public void setAction(JCheckBox action) {
         this.action = action;
     }
+    
+    @DisplayAs(value = "", index = 6, editable = true)
+    public JButton getButton() {
+		return button;
+	}
+
+	public void setButton(JButton button) {
+		this.button = button;
+	}
  	
     public String getPath() {
         return path;

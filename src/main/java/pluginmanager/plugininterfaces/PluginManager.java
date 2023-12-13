@@ -30,6 +30,5 @@ public interface PluginManager {
 	public void addActionProcessor(String actionName, ActionProcessor processor);
 	public void addActionProcessor(String actionName, ActionProcessor processor, int priority);
 	public void removeActionProcessor(String actionName, ActionProcessor processor);
-	public void callAction(String actionName, Map<String, Object> context);
-	
+	public void callAction(String actionName, Map<String, Object> context);	
 }

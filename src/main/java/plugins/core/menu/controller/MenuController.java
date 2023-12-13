@@ -15,14 +15,10 @@ package plugins.core.menu.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import plugins.core.frame.controller.FrameController;
-import plugins.core.login.controller.LoginController;
 import plugins.core.menu.model.*;
-import pluginmanager.PluginManagerImpl;
 import pluginmanager.plugininterfaces.PluginManager;
 import pluginmanager.plugininterfaces.Service;
 import plugins.core.menu.view.Menu;
