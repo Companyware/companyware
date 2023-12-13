@@ -13,15 +13,15 @@
  *******************************************************************************/
 package plugins.core.users.view;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.URL;
 
 public class WhiteButton extends JButton {
-    JButton button = new JButton();
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	JButton button = new JButton();
     private Color bg;
 
     public WhiteButton() {

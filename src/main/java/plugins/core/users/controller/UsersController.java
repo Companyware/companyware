@@ -13,26 +13,80 @@
  *******************************************************************************/
 package plugins.core.users.controller;
 
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.Observable;
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import pluginmanager.plugininterfaces.PluginManager;
 import pluginmanager.plugininterfaces.Service;
+import plugins.core.frame.controller.FrameController;
+import plugins.core.frame.view.Frame;
+import plugins.core.frame.view.JOutlookBar;
 import plugins.core.users.model.UsersModel;
 import plugins.core.users.view.Users;
 
-public class UsersController implements ActionListener, Service{
+public class UsersController extends Observable implements Service, MouseListener, ActionListener{
 
 	private static final Log log = LogFactory.getLog(UsersController.class);
 	private UsersModel model;
 	private Users view;
+	private PluginManager pm;
 	
 	public UsersController(PluginManager pm) {
+		this.pm = pm;
 		this.model = new UsersModel();
-		pm.registerService("UsersController",this);
+		this.pm.registerService("UsersController",this);
 		view = new Users(pm);
 		model.addObserver(view);
+	}
+	
+	@Override
+	public void mouseClicked(MouseEvent event) {
+		JLabel label = (JLabel) event.getSource();
+		
+		switch (label.getName()) {
+			case "customeroverview":{
+				this.createUsersOverview();
+				break;
+			}
+			case "addcustomer":{
+				this.createAddUserview();
+				break;
+			}
+		}
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent event) {
+		JLabel label = (JLabel) event.getSource();
+		label.setCursor(new Cursor(Cursor.HAND_CURSOR));
+	}
+
+	@Override
+	public void mouseExited(MouseEvent event) {
+		JLabel label = (JLabel) event.getSource();
+		label.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		label.setBorder(BorderFactory.createEmptyBorder());
+	}
+
+	@Override
+	public void mousePressed(MouseEvent event) {
+		// TODO Auto-generated method stub
+		JLabel label = (JLabel) event.getSource();
+		label.setBorder(BorderFactory.createLoweredBevelBorder());
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent event) {
+		// TODO Auto-generated method stub
+		JLabel label = (JLabel) event.getSource();
+		label.setBorder(BorderFactory.createEmptyBorder());
 	}
 
 	@Override
@@ -43,11 +97,23 @@ public class UsersController implements ActionListener, Service{
 	    case "Benutzerverwaltung":
 	    	{
 	    		this.createUsersOverview();
+	    		FrameController frameController = (FrameController)pm.getService("FrameController");
+	    		Frame frameView = (Frame)frameController.getView();
+	    		JOutlookBar outlookBar = frameView.getOutlookBar();
+	    		outlookBar.setVisibleBar(1);
 	    	}
 		}
 	}
 	
 	public void createUsersOverview(){
 		view.createTableOverview();
+	}
+	
+	public void createAddUserview(){
+	//	view.addUserView();
+	}
+	
+	public void editCustomerView(){
+	//	view.editUserView(model);
 	}
 }
