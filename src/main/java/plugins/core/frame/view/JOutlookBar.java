@@ -22,22 +22,19 @@ package plugins.core.frame.view;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.Map;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.List;
 
 import javax.swing.*;
 
 import core.ApplicationContextProvider;
 import core.TextMessages;
-import pluginmanager.plugininterfaces.Service;
-import plugins.community.mbduscustomer.controller.MbdusCustomerController;
 
 // Import the Java classes
 
@@ -48,6 +45,10 @@ import plugins.community.mbduscustomer.controller.MbdusCustomerController;
 public class JOutlookBar extends JPanel implements ActionListener {
 
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	/**
      * The top panel: contains the buttons displayed on the top of the JOutlookBar
      */
     private JPanel topPanel = new JPanel(new GridLayout(1, 1));
@@ -67,6 +68,7 @@ public class JOutlookBar extends JPanel implements ActionListener {
      * The currently visible bar (zero-based index)
      */
     private int visibleBar = 0;
+    
     /**
      * A place-holder for the currently visible component
      */
@@ -106,6 +108,19 @@ public class JOutlookBar extends JPanel implements ActionListener {
      */
     public void addBar(String name, JComponent component) {
         BarInfo barInfo = new BarInfo(name, component);
+        barInfo.getButton().addActionListener(this);
+        this.bars.put(name, barInfo);
+        render();
+    }
+    
+    /**
+     * Adds the specified component to the JOutlookBar and sets the bar's name
+     * 
+     * @param  name      The name of the outlook bar
+     * @param  component   The component to add to the bar
+     */
+    public void addBar(String name, JComponent component, int priority) {
+        BarInfo barInfo = new BarInfo(name, component, priority);
         barInfo.getButton().addActionListener(this);
         this.bars.put(name, barInfo);
         render();
@@ -189,7 +204,7 @@ public class JOutlookBar extends JPanel implements ActionListener {
      */
     public void setVisibleBar(int visibleBar) {
         if (visibleBar > 0
-                && visibleBar < this.bars.size() - 1) {
+                && visibleBar < this.bars.size()) {
             this.visibleBar = visibleBar;
             render();
         }
@@ -213,7 +228,10 @@ public class JOutlookBar extends JPanel implements ActionListener {
         int totalBars = this.bars.size();
         int topBars = this.visibleBar + 1;
         int bottomBars = totalBars - topBars;
-
+        
+        // Ordering JOutlookbar by priority
+        this.sortByPriority();
+        
         // Get an iterator to walk through out bars with
         Iterator itr = this.bars.keySet().iterator();
 
@@ -262,6 +280,22 @@ public class JOutlookBar extends JPanel implements ActionListener {
                 getParent().validate();
             } catch (Exception ignored) {
             }
+        }
+    }
+    
+    private void sortByPriority() {
+        List<Map.Entry<String, BarInfo>> list = new LinkedList<Map.Entry<String, BarInfo>>(this.bars.entrySet());
+        Collections.sort(list, new Comparator<Map.Entry<String, BarInfo>>() {
+            public int compare(Map.Entry<String, BarInfo> o1, Map.Entry<String, BarInfo> o2) {
+                return (Integer.valueOf(o1.getValue().getPriority())).compareTo(Integer.valueOf(o2.getValue().getPriority()));
+            }
+        });
+
+        /// Loop the sorted list and put it into a new insertion order Map
+        /// LinkedHashMap
+        this.bars = new LinkedHashMap<String, BarInfo>();
+        for (Map.Entry<String, BarInfo> entry : list) {
+            this.bars.put(entry.getKey(), entry.getValue());
         }
     }
 
@@ -327,7 +361,7 @@ public class JOutlookBar extends JPanel implements ActionListener {
      * button     The associated JButton for the bar
      * component    The component maintained in the Outlook bar
      */
-    class BarInfo {
+    class BarInfo{
 
         /**
          * The name of this bar
@@ -341,8 +375,10 @@ public class JOutlookBar extends JPanel implements ActionListener {
          * The component that is the body of the Outlook bar
          */
         private JComponent component;
+        
+        private int priority = 1;
 
-        /**
+		/**
          * Creates a new BarInfo
          * 
          * @param  name    The name of the bar
@@ -351,6 +387,29 @@ public class JOutlookBar extends JPanel implements ActionListener {
         public BarInfo(String name, JComponent component) {
             this.name = name;
             this.component = component;
+            
+            if(component!=null){
+	            Dimension componentDimension = this.component.getPreferredSize();
+	            componentDimension.height = 150;
+	            this.component.setPreferredSize(componentDimension);
+            }
+            TextMessages service = ApplicationContextProvider.getContext().getBean(TextMessages.class);
+            this.button = new JButton(service.get(name));
+            Dimension buttonDimension = this.button.getPreferredSize();
+            buttonDimension.height = 50;
+            this.button.setPreferredSize(buttonDimension);
+        }
+
+		/**
+         * Creates a new BarInfo
+         * 
+         * @param  name    The name of the bar
+         * @param  component  The component that is the body of the Outlook Bar
+         */
+        public BarInfo(String name, JComponent component, int priority) {
+            this.name = name;
+            this.component = component;
+            this.priority = priority;
             
             if(component!=null){
 	            Dimension componentDimension = this.component.getPreferredSize();
@@ -414,5 +473,13 @@ public class JOutlookBar extends JPanel implements ActionListener {
         public JComponent getComponent() {
             return this.component;
         }
+        
+        public int getPriority() {
+			return priority;
+		}
+
+		public void setPriority(int priority) {
+			this.priority = priority;
+		}
     }
 }

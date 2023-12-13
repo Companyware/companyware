@@ -18,30 +18,24 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Image;
 import java.awt.Insets;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.table.TableColumnModel;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import core.ApplicationContextProvider;
 import core.TextMessages;
 import plugins.community.mbduscustomer.model.Repository;
@@ -82,7 +76,6 @@ public class MbdusCustomerView implements Observer{
 	public MbdusCustomerView(PluginManager pm) {
 		this.pm = pm;
 		this.addOutlookBarEntry();
-		
 	}
 	
 	public void addOutlookBarEntry(){
@@ -91,13 +84,11 @@ public class MbdusCustomerView implements Observer{
 		JOutlookBar outlookBar = frameView.getOutlookBar();
 		MbdusCustomerController mbdusCustomerController = (MbdusCustomerController)pm.getService("MbdusCustomer");
 		ImageIcon useradd = new ImageIcon(this.getClass().getResource("/images/user_add.png"));
-		ImageIcon userdelete = new ImageIcon(this.getClass().getResource("/images/user_delete.png"));
 		ImageIcon users = new ImageIcon(this.getClass().getResource("/images/users.gif"));
 		outlookBar.addBarEntry("customer");
 		outlookBar.addBarEntryIcon("customer","addcustomer", useradd, mbdusCustomerController);
-//		outlookBar.addBarEntryIcon("customer","deletecustomer", userdelete, mbdusCustomerController);
 		outlookBar.addBarEntryIcon("customer","customeroverview", users, mbdusCustomerController);
-		outlookBar.addBar("customer", outlookBar.getPanel("customer"));
+		outlookBar.addBar("customer", outlookBar.getPanel("customer"), 100);
 		outlookBar.setPreferredSize();
 	}
 	
@@ -138,7 +129,6 @@ public class MbdusCustomerView implements Observer{
 	    JCheckBox checkBox = new JCheckBox();
 	    checkBox.setActionCommand("active");
         checkBox.setHorizontalAlignment(JCheckBox.CENTER);
-   //     table.setDefaultEditor(Boolean.class, new DefaultCellEditor(checkBox));
         table.setDefaultEditor(Boolean.class,new CheckboxCellEditor(checkBox,pm));
         
         JCheckBox button = new JCheckBox();
@@ -154,11 +144,6 @@ public class MbdusCustomerView implements Observer{
         table.setAutoResizeMode(JTable.AUTO_RESIZE_NEXT_COLUMN);
         TableColumnModel colModel=table.getColumnModel();
         colModel.getColumn(0).setPreferredWidth(50);
-//        colModel.getColumn(1).setPreferredWidth(200);
-//        colModel.getColumn(2).setPreferredWidth(200);    
-//        colModel.getColumn(3).setPreferredWidth(50);
-//        colModel.getColumn(4).setPreferredWidth(50);    
-//        colModel.getColumn(5).setPreferredWidth(50);    
         
 	    table.setModel(tableModel);
 	    

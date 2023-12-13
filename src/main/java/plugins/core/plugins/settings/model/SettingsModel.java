@@ -14,7 +14,6 @@
 package plugins.core.plugins.settings.model;
 
 import java.util.Observable;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory; 
 

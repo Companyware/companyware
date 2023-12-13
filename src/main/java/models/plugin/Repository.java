@@ -14,6 +14,13 @@
 package models.plugin;
 
 import java.util.List;
+
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.ParameterExpression;
+import javax.persistence.criteria.Root;
+
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import core.HibernateUtils;
@@ -29,6 +36,27 @@ public class Repository {
         }
         return plugin;
     }  
+    
+    public static PluginModel getPluginByName(String name) {
+    	PluginModel plugin;
+        try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+        	// Create CriteriaBuilder
+        	CriteriaBuilder builder = session.getCriteriaBuilder();
+        	// Create CriteriaQuery
+        	CriteriaQuery criteriaQuery = builder.createQuery(PluginModel.class);
+        	
+        	Root<PluginModel> root = criteriaQuery.from(PluginModel.class);
+        	ParameterExpression<String> nameParam = builder.parameter(String.class);
+        	
+        	criteriaQuery.select(root).where(builder.like(root.get("name"), nameParam));
+        	
+        	TypedQuery<PluginModel> query = session.createQuery(criteriaQuery);
+        	query.setParameter(nameParam, name);
+        	plugin = query.getSingleResult();
+        }
+         
+        return plugin;
+    }    
     
     public static List<PluginModel> getPlugins() {
         List<PluginModel> plugins;
@@ -53,6 +81,18 @@ public class Repository {
         try (Session session = HibernateUtils.getSessionFactory().openSession()) {
             session.beginTransaction();
             session.saveOrUpdate(plugin);
+            session.getTransaction().commit();
+        }
+    }
+    
+  public static void deleteByName(String name) {
+    	
+    	PluginModel plugin = getPluginByName(name);
+        try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+            session.beginTransaction();
+   
+            session.remove(plugin);
+            
             session.getTransaction().commit();
         }
     }
