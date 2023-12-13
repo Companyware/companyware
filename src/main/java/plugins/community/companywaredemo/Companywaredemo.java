@@ -24,11 +24,18 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.FileSystems;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
+
 import core.HibernateUtils;
 import pluginmanager.plugininterfaces.ActionProcessor;
 import pluginmanager.plugininterfaces.Plugin;
@@ -45,7 +52,12 @@ public class Companywaredemo implements Plugin {
 		Boolean firstRun = this.firstRun();
 		
 		if(firstRun){
-			this.installSql();
+			try {
+				this.installSql();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	
 		pm.registerService("CompanywaredemoController", new CompanywaredemoController(pm));
@@ -98,7 +110,7 @@ public class Companywaredemo implements Plugin {
 			return false;
 	}
 	
-	public void installSql(){
+	public void installSql() throws SQLException{
 		URL url = Companywaredemo.class.getResource("/");
         URI uri = null;
 		try {
@@ -119,23 +131,32 @@ public class Companywaredemo implements Plugin {
 			String line = null;
 			StringBuilder sb = new StringBuilder();
 	
-			Session session = HibernateUtils.getSessionFactory().openSession();
-			try {
-				while((line = br.readLine()) != null) {
-					if (line.trim().endsWith(";")){
-						session.beginTransaction();
-						sb.append(line.replace(";", ""));
-						session.createNativeQuery(sb.toString()).executeUpdate();
-						session.getTransaction().commit();
-						sb = new StringBuilder();
+			SessionFactory sessionFactory = HibernateUtils.getSessionFactory();
+			
+			Connection conn;
+			conn = sessionFactory.getSessionFactoryOptions().getServiceRegistry().getService(ConnectionProvider.class).getConnection();
+			
+			DatabaseMetaData dmd = conn.getMetaData();
+			ResultSet rs = dmd.getTables(null,"APP", "DEMO",null);
+			if (!rs.next()) {
+				try {
+					Session session = HibernateUtils.getSessionFactory().openSession();
+					while((line = br.readLine()) != null) {
+						if (line.trim().endsWith(";")){
+							session.beginTransaction();
+							sb.append(line.replace(";", ""));
+							session.createNativeQuery(sb.toString()).executeUpdate();
+							session.getTransaction().commit();
+							sb = new StringBuilder();
+						}
+						else{
+							sb.append(line);
+						}
 					}
-					else{
-						sb.append(line);
-					}
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
 		}
 	}
