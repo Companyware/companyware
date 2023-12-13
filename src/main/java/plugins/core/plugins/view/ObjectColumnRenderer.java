@@ -16,7 +16,6 @@ package plugins.core.plugins.view;
 
 import java.awt.Color;
 import java.awt.Component;
-
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -41,6 +40,5 @@ public class ObjectColumnRenderer extends DefaultTableCellRenderer {
 		cellComponent.setBackground(Color.white);
 		cellComponent.setForeground(Color.black);
 		return cellComponent;
-//		return this;
 	}
 }

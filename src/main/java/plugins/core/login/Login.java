@@ -15,7 +15,6 @@ package plugins.core.login;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import pluginmanager.plugininterfaces.Plugin;
 import pluginmanager.plugininterfaces.PluginManager;
 import plugins.core.login.controller.LoginController;

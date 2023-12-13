@@ -15,7 +15,6 @@ package plugins.community.companywaredemo;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import pluginmanager.plugininterfaces.Service;
 import plugins.core.menu.view.Menu;
 

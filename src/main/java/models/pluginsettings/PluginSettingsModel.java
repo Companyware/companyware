@@ -13,18 +13,13 @@
  *******************************************************************************/
 package models.pluginsettings;
 
-import java.util.Set;
-
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.swing.JCheckBox;
 
 import models.plugin.PluginModel;
 import plugins.core.plugins.model.DisplayAs;

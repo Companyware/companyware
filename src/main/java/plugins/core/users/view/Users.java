@@ -20,8 +20,7 @@ import java.awt.Font;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-
-import javax.swing.DefaultCellEditor;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -33,10 +32,8 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.table.TableColumnModel;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import core.ApplicationContextProvider;
 import core.TextMessages;
 import models.user.UserModel;
@@ -44,6 +41,7 @@ import models.user.Repository;
 import pluginmanager.plugininterfaces.PluginManager;
 import plugins.core.frame.controller.FrameController;
 import plugins.core.frame.view.Frame;
+import plugins.core.frame.view.JOutlookBar;
 import plugins.core.menu.view.Menu;
 import plugins.core.users.controller.ButtonTableEditor;
 import plugins.core.users.controller.CheckboxCellEditor;
@@ -60,6 +58,7 @@ public class Users  implements Observer {
 	public Users(PluginManager pm) {
 		this.pm = pm;
 		this.createMenuEntry();
+		this.addOutlookBarEntry();
 	}
 	
 	/**
@@ -67,7 +66,6 @@ public class Users  implements Observer {
 	 */
 	public void createMenuEntry(){
 		UsersController usersController = (UsersController)pm.getService("UsersController");
-		FrameController frameController = (FrameController)pm.getService("FrameController");
 		Menu menuView = (Menu)pm.getService("MenuView");
 		JMenu settings = menuView.getSettings();
 		TextMessages service = ApplicationContextProvider.getContext().getBean(TextMessages.class);
@@ -76,8 +74,21 @@ public class Users  implements Observer {
         settings.add(pluginManager);
 	}
 	
+	public void addOutlookBarEntry(){
+		FrameController frameController = (FrameController)pm.getService("FrameController");
+		Frame frameView = (Frame)frameController.getView();
+		JOutlookBar outlookBar = frameView.getOutlookBar();
+		UsersController usersController = (UsersController)pm.getService("UsersController");
+		ImageIcon useradd = new ImageIcon(this.getClass().getResource("/images/user_add.png"));
+		ImageIcon users = new ImageIcon(this.getClass().getResource("/images/users.gif"));
+		outlookBar.addBarEntry("settings");
+		outlookBar.addBarEntryIcon("settings","adduser", useradd, usersController);
+		outlookBar.addBarEntryIcon("settings","useroverview", users, usersController);
+		outlookBar.addBar("settings", outlookBar.getPanel("settings"),200);
+		outlookBar.setPreferredSize();
+	}
+	
 	public void createTableOverview(){
-		UsersController pluginsController = (UsersController)pm.getService("UsersController");
 		FrameController frameController = (FrameController)pm.getService("FrameController");
 		Frame frame = frameController.getView();
 		JPanel panel = new JPanel(new BorderLayout());

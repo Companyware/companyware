@@ -14,11 +14,8 @@
 package plugins.core.users;
 
 import plugins.core.users.controller.UsersController;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import pluginmanager.PluginManagerImpl;
 import pluginmanager.plugininterfaces.Plugin;
 import pluginmanager.plugininterfaces.PluginManager;
 

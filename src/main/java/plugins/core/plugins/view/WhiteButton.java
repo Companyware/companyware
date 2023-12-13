@@ -17,7 +17,11 @@ import javax.swing.*;
 import java.awt.*;
 
 public class WhiteButton extends JButton {
-    JButton button = new JButton();
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	JButton button = new JButton();
     private Color bg;
 
     public WhiteButton() {
