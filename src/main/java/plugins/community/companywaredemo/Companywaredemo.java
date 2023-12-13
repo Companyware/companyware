@@ -53,7 +53,8 @@ public class Companywaredemo implements Plugin {
 		
 		if(firstRun){
 			try {
-				this.installSql();
+				this.createTable();
+				this.insertData();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -110,7 +111,7 @@ public class Companywaredemo implements Plugin {
 			return false;
 	}
 	
-	public void installSql() throws SQLException{
+	public void createTable() throws SQLException{
 		URL url = Companywaredemo.class.getResource("/");
         URI uri = null;
 		try {
@@ -125,7 +126,7 @@ public class Companywaredemo implements Plugin {
 		if (uri != null){
 			String fileSeparator = FileSystems.getDefault().getSeparator();
 			InputStream is = getClass().getClassLoader()
-					.getResourceAsStream("plugins"+fileSeparator+"community"+fileSeparator+"companywaredemo"+fileSeparator+"setup"+fileSeparator+"firstRun.sql");
+					.getResourceAsStream("plugins"+fileSeparator+"community"+fileSeparator+"companywaredemo"+fileSeparator+"setup"+fileSeparator+"createTable.sql");
 			BufferedReader br = new BufferedReader(new InputStreamReader(is));
 	
 			String line = null;
@@ -157,6 +158,49 @@ public class Companywaredemo implements Plugin {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+			}
+		}
+	}
+	
+	public void insertData() throws SQLException{
+		URL url = Companywaredemo.class.getResource("/");
+        URI uri = null;
+		try {
+			if(url!=null){
+				uri = url.toURI();
+			}
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if (uri != null){
+			String fileSeparator = FileSystems.getDefault().getSeparator();
+			InputStream is = getClass().getClassLoader()
+					.getResourceAsStream("plugins"+fileSeparator+"community"+fileSeparator+"companywaredemo"+fileSeparator+"setup"+fileSeparator+"insertData.sql");
+			BufferedReader br = new BufferedReader(new InputStreamReader(is));
+	
+			String line = null;
+			StringBuilder sb = new StringBuilder();
+	
+			
+			try {
+				Session session = HibernateUtils.getSessionFactory().openSession();
+				while((line = br.readLine()) != null) {
+					if (line.trim().endsWith(";")){
+						session.beginTransaction();
+						sb.append(line.replace(";", ""));
+						session.createNativeQuery(sb.toString()).executeUpdate();
+						session.getTransaction().commit();
+						sb = new StringBuilder();
+					}
+					else{
+						sb.append(line);
+					}
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 	}
