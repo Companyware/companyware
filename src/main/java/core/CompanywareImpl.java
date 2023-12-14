@@ -17,10 +17,15 @@ import java.awt.FlowLayout;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.FileSystems;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -72,6 +77,42 @@ public class CompanywareImpl {
 		query.setParameter("name", pluginName);
 		plugin = (PluginModel) query.getSingleResult();
 		return plugin;
+	}
+	
+	public void checkFirstRun(){
+		URL url = CompanywareImpl.class.getResource("/");
+		URI uri = null;
+		try {
+			if(url!=null){
+				uri = url.toURI();
+			}
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		File file;
+		File installFile;
+		String fileSeparator = FileSystems.getDefault().getSeparator();
+		if (uri != null && uri.getScheme().equals("jar")) {
+			file = new File("classes");
+			installFile = new File("classes"+fileSeparator+"installsql.lck");
+		} 
+		else{
+			file = new File("src/main/java");
+			installFile = new File("src"+fileSeparator+"main"+fileSeparator+"java"+fileSeparator+"installsql.lck");
+		}
+		
+		if(!installFile.exists()){
+			this.executeSetupSql();
+			this.setFirstRun();
+			try {
+				FileOutputStream s = new FileOutputStream(installFile,false);
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public void setFirstRun(){
