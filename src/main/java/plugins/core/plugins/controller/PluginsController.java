@@ -92,6 +92,7 @@ public class PluginsController implements ActionListener, Service{
 					newFile.delete();
 					PluginManager pm = PluginManagerFactory.createPluginManager("target/classes/plugins");
 					pm.init();
+					
 					this.createPluginManagerOverview();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
