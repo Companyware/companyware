@@ -75,9 +75,7 @@ public class Companyware implements CommandLineRunner{
 		FrameController frameController = (FrameController)pm.getService("FrameController");
 		LoginController loginController = (LoginController)pm.getService("LoginController");
 		
-	//	core.Companyware.getContainer().executeUpdateSql();
 		if(frameController!=null){
-			core.Companyware.getContainer().setFirstRun();
 			frameController.getView().setVisible(true);
 			loginController.getView().setVisible(true);
 		}
