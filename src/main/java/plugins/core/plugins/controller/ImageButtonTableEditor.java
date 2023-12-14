@@ -113,7 +113,6 @@ public class ImageButtonTableEditor extends DefaultCellEditor{
 			}
 			
 			try {
-				System.out.println(file.getAbsolutePath());
 				FileUtils.deleteDirectory(file);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
