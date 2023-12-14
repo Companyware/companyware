@@ -17,6 +17,9 @@
 package plugins.core.frame.controller;
 
 import plugins.core.frame.view.Frame;
+
+import javax.swing.JPanel;
+
 import pluginmanager.plugininterfaces.Service;
 
 /**
@@ -36,9 +39,11 @@ public class FrameController implements Service{
 	public FrameController() {
 		view = new Frame();
 	}
+	
 	public Frame getView() {
 		return view;
 	}
+	
 	public void setView(Frame view) {
 		this.view = view;
 	}
