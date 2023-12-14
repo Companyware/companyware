@@ -70,7 +70,8 @@ public class Companyware implements CommandLineRunner{
 	@Override
     public void run(String... args) throws FileNotFoundException {
 		new ApplicationContextProvider();
-		PluginManager pm = PluginManagerFactory.createPluginManager("src/main/java/plugins");
+	//	PluginManager pm = PluginManagerFactory.createPluginManager("src/main/java/plugins");
+		PluginManager pm = PluginManagerFactory.createPluginManager("target/classes/plugins");
 		pm.init();
 		FrameController frameController = (FrameController)pm.getService("FrameController");
 		LoginController loginController = (LoginController)pm.getService("LoginController");

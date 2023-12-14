@@ -108,6 +108,7 @@ public class PluginManagerImpl implements PluginManager {
             for (Iterator<Path> it = walk.iterator(); it.hasNext();){
             	String filename = it.next().toString();
                 if(filename.contains("/core/") || filename.contains("community") ){
+                	System.out.println(filename);
                 	boolean core = filename.contains("/core/")?true:false;
                 	
                 	Path pathPlugins = fileSystem.getPath(filename);
@@ -128,16 +129,20 @@ public class PluginManagerImpl implements PluginManager {
         }
         else{
         	File dh = new File(this.pluginsDir);
+        	System.out.println(this.pluginsDir);
         
             if(dh != null){ 
     			List<String> listFiles = Arrays.asList(dh.list());
     		
     			Collections.sort(listFiles,Collections.reverseOrder());
     			for (String pluginDir : listFiles){
+    				System.out.println("for");
+    				System.out.println(pluginDir);
     				if(pluginDir.equals("community") || pluginDir.equals("core")){
     					boolean core = pluginDir.equals("core")?true:false;
     					File pluginDirectory = new File(this.pluginsDir + System.getProperty("file.separator") + pluginDir); 
     					for (File plugin : pluginDirectory.listFiles()){
+    						System.out.println(plugin.getAbsolutePath());
     						if(!plugin.getName().startsWith(".")){
     							initPlugin(plugin, core);
     						}
@@ -381,8 +386,14 @@ public class PluginManagerImpl implements PluginManager {
 	    
 	    String fileSeparator = FileSystems.getDefault().getSeparator();
 	    
-	    File file = new File("src"+fileSeparator+"main"+fileSeparator+"java"+fileSeparator+"plugins"+fileSeparator+"community/"+pluginName.substring(0, 1).toLowerCase()+pluginName.substring(1)+fileSeparator+pluginName+".xml");
-	      
+	    File file;
+	    if(this.isJar){
+	    	file = new File("classes"+fileSeparator+"plugins"+fileSeparator+"community/"+pluginName.substring(0, 1).toLowerCase()+pluginName.substring(1)+fileSeparator+pluginName+".xml");
+	    }
+	    else{
+	    	file = new File("target"+fileSeparator+"classes"+fileSeparator+"plugins"+fileSeparator+"community/"+pluginName.substring(0, 1).toLowerCase()+pluginName.substring(1)+fileSeparator+pluginName+".xml");
+	    }
+	    
 	    if(file.exists()){
 	    	
 	    	//Build Document
