@@ -36,6 +36,7 @@ import org.apache.commons.logging.LogFactory;
 import models.plugin.PluginModel;
 import models.plugin.Repository;
 import plugins.core.plugins.model.*;
+import pluginmanager.PluginManagerFactory;
 import pluginmanager.plugininterfaces.PluginManager;
 import pluginmanager.plugininterfaces.Service;
 import plugins.core.plugins.view.Plugins;
@@ -89,6 +90,9 @@ public class PluginsController implements ActionListener, Service{
 					Files.copy(selectedFile.toPath(), Paths.get(newFile.getAbsolutePath()), StandardCopyOption.REPLACE_EXISTING);
 					this.unzip(newFile.getAbsolutePath(), dir.getAbsolutePath(), FilenameUtils.removeExtension(selectedFile.getName().toLowerCase()));
 					newFile.delete();
+					PluginManager pm = PluginManagerFactory.createPluginManager("target/classes/plugins");
+					pm.init();
+					this.createPluginManagerOverview();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

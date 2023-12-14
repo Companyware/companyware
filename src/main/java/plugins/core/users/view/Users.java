@@ -67,11 +67,13 @@ public class Users  implements Observer {
 	public void createMenuEntry(){
 		UsersController usersController = (UsersController)pm.getService("UsersController");
 		Menu menuView = (Menu)pm.getService("MenuView");
-		JMenu settings = menuView.getSettings();
-		TextMessages service = ApplicationContextProvider.getContext().getBean(TextMessages.class);
-		JMenuItem pluginManager = new JMenuItem(service.get("usermanager.menu"));
-        pluginManager.addActionListener(usersController);
-        settings.add(pluginManager);
+		if(menuView != null){
+			JMenu settings = menuView.getSettings();
+			TextMessages service = ApplicationContextProvider.getContext().getBean(TextMessages.class);
+			JMenuItem pluginManager = new JMenuItem(service.get("usermanager.menu"));
+	        pluginManager.addActionListener(usersController);
+	        settings.add(pluginManager);
+		}
 	}
 	
 	public void addOutlookBarEntry(){
