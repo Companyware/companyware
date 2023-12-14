@@ -137,6 +137,7 @@ public class Frame extends JFrame{
 		this.constTopHeight = 150;
 		this.topPanel.setPreferredSize(new Dimension(this.getWidth(),this.constTopHeight));
 		this.topPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY));
+		this.topPanel.setVisible(false);
 	}
 	
 	public void initLeftArea(){

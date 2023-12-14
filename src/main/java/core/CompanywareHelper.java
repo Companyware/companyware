@@ -15,7 +15,11 @@ package core;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.FileSystems;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -42,7 +46,26 @@ public class CompanywareHelper {
 	    
 	    String fileSeparator = FileSystems.getDefault().getSeparator();
 	    
-	    File file = new File("src"+fileSeparator+"main"+fileSeparator+"java"+fileSeparator+"plugins"+fileSeparator+"community/"+pluginName.substring(0, 1).toLowerCase()+pluginName.substring(1)+fileSeparator+pluginName+".xml");
+	    URL url = getClass().getResource("/");
+
+        URI uri = null;
+		
+		try {
+			if(url!=null){
+				uri = url.toURI();
+			}
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    
+	    File file;
+	    if (uri != null && uri.getScheme().equals("jar")) {
+	    	file = new File("classes"+fileSeparator+"plugins"+fileSeparator+"community/"+pluginName.substring(0, 1).toLowerCase()+pluginName.substring(1)+fileSeparator+pluginName+".xml");
+	    }
+	    else{
+	    	file = new File("target"+fileSeparator+"classes"+fileSeparator+"plugins"+fileSeparator+"community/"+pluginName.substring(0, 1).toLowerCase()+pluginName.substring(1)+fileSeparator+pluginName+".xml");
+	    }
 	    
 	    if(file.exists()){
 	    	//Build Document
