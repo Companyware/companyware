@@ -25,6 +25,10 @@ import javax.swing.JCheckBox;
 import javax.swing.JTable;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import core.ApplicationContextProvider;
+import core.TextMessages;
+
 import java.io.*;
 import java.net.URL;
 
@@ -44,10 +48,13 @@ public class ButtonTableEditor extends DefaultCellEditor{
 	private boolean clicked;
 	private int row, col;
 	private ImageIcon icon;
+	private JTable table;
+	private PluginManager pm;
 
 	public ButtonTableEditor(JCheckBox checkBox, PluginManager pm)
 	{
 		super(checkBox);
+		this.pm = pm;
 		button = new WhiteButton();
 		URL url = getClass().getResource("/small_edit.png");
     	BufferedImage img = null;
@@ -77,6 +84,7 @@ public class ButtonTableEditor extends DefaultCellEditor{
 	}
 	public JButton getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column)
 	{
+		this.table = table;
 		this.row = row;
 		this.col = column;
 		
@@ -93,8 +101,15 @@ public class ButtonTableEditor extends DefaultCellEditor{
 			log.info(col);
 			
 			log.info("user edit");
-	//		JOptionPane.showInputDialog(button, "Column with Value: "+table.getValueAt(row, 0) + " -  Clicked!");
-
+			TextMessages service = ApplicationContextProvider.getContext().getBean(TextMessages.class);
+			int usernameColumnIndex = this.getColumnIndex(table, service.get("userview.username"));
+		
+			log.info(row);
+			log.info(col);
+		
+			UsersController usersController = (UsersController)pm.getService("UsersController");
+			usersController.setUser((String)table.getValueAt(row,usernameColumnIndex));
+			usersController.editCustomerView();
 		}
 		clicked = false;
 		log.info(label);
@@ -110,5 +125,12 @@ public class ButtonTableEditor extends DefaultCellEditor{
 	protected void fireEditingStopped()
 	{
 		super.fireEditingStopped();
+	}
+	
+	private int getColumnIndex (JTable table, String header) {
+	    for (int i=0; i < table.getColumnCount(); i++) {
+	        if (table.getColumnName(i).equals(header)) return i;
+	    }
+	    return -1;
 	}
 }
