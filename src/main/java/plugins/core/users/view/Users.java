@@ -20,6 +20,8 @@ import java.awt.Font;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -27,8 +29,10 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.table.TableColumnModel;
@@ -54,6 +58,13 @@ public class Users  implements Observer {
 	private static final Log log = LogFactory.getLog(Users.class);
 	
 	private PluginManager pm;
+
+	private JTextField nameTextField;
+	private JTextField emailTextField;
+	private JCheckBox activeCheckbox;
+	private JTextField usernameTextField;
+	private JPasswordField passwordField;
+
 	
 	public Users(PluginManager pm) {
 		this.pm = pm;
@@ -144,6 +155,241 @@ public class Users  implements Observer {
 	    
 	    panel.add(new JScrollPane(table),BorderLayout.CENTER);
 	    frame.getCenterPanel().removeAll();
+	    frame.getCenterPanel().add(panel,BorderLayout.CENTER);
+	    frame.getCenterPanel().revalidate();
+	    frame.getCenterPanel().repaint();
+	    frame.setVisible(true);
+	}
+	
+	public void addUserView(){
+		UsersController usersController = (UsersController)pm.getService("UsersController");
+		FrameController frameController = (FrameController)pm.getService("FrameController");
+		Frame frame = frameController.getView();
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.setPreferredSize(new Dimension(frame.getWidth()+frame.getConstCenterWidth()-250,frame.getHeight()+frame.getConstCenterHeight()-100));
+		
+		JPanel headerPanel = new JPanel(null);
+		headerPanel.setPreferredSize(new Dimension(panel.getWidth()-50,100));
+		
+		TextMessages service = ApplicationContextProvider.getContext().getBean(TextMessages.class);
+		
+		JLabel label = new JLabel(service.get("userview.adduser"),SwingConstants.CENTER);
+		label.setBounds((frame.getWidth()+frame.getConstCenterWidth()-250)/2-125,30,200,40);
+        label.setFont(new Font(label.getFont().getName(), Font.BOLD, 20));
+        headerPanel.add(label);
+        panel.add(headerPanel,BorderLayout.NORTH);
+        
+        //Content
+        JPanel buttonPanel = new JPanel(null);
+        
+        JButton save = new JButton(service.get("userview.saveuser"));
+        save.setActionCommand("adduser");
+        save.addActionListener(usersController);
+        
+        save.setBounds((frame.getWidth()+frame.getConstCenterWidth()-250)/2-125,30,200,40);
+   
+        buttonPanel.add(save);
+        buttonPanel.setPreferredSize(new Dimension(panel.getWidth()-50,100));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        
+        JPanel container = new JPanel(new BorderLayout());
+        container.setPreferredSize(new Dimension((frame.getWidth()+frame.getConstCenterWidth()-250),frame.getHeight()+frame.getConstCenterHeight()-100));
+        JPanel leftContainer = new JPanel(null);
+        leftContainer.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        JPanel rightContainer = new JPanel(null);
+        rightContainer.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        leftContainer.setPreferredSize(new Dimension((frame.getWidth()/2)+frame.getConstCenterWidth()-100,frame.getHeight()+frame.getConstCenterHeight()-100));
+        rightContainer.setPreferredSize(new Dimension((frame.getWidth()/2)+frame.getConstCenterWidth()-50,frame.getHeight()+frame.getConstCenterHeight()-100));
+		int y = 150;
+	    
+	    JLabel nameLabel=new JLabel(service.get("userview.name"));
+	    nameLabel.setBounds(50,y,150,30);
+	    this.nameTextField=new JTextField();
+	    nameTextField.setBounds(200,y,300,30);
+	    leftContainer.add(nameLabel);
+	    leftContainer.add(nameTextField);
+	    
+	    y += 70;
+	    JLabel emailLabel=new JLabel(service.get("userview.email"));
+	    emailLabel.setBounds(50,y,150,30);
+	    this.emailTextField=new JTextField();
+	    emailTextField.setBounds(200,y,300,30);
+	    leftContainer.add(emailLabel);
+	    leftContainer.add(emailTextField);
+	    
+	    y += 70;
+	    JLabel activeLabel=new JLabel(service.get("userview.active"));
+	    activeLabel.setBounds(50,y,150,30);
+	    this.activeCheckbox=new JCheckBox();
+	    activeCheckbox.setBounds(195,y,200,30);
+	    leftContainer.add(activeLabel);
+	    leftContainer.add(activeCheckbox);
+	    
+	    y = 150;
+	    JLabel usernameLabel=new JLabel(service.get("userview.username"));
+	    usernameLabel.setBounds(50,y,150,30);
+	    this.usernameTextField=new JTextField();
+	    usernameTextField.setBounds(200,y,300,30);
+	    rightContainer.add(usernameLabel);
+	    rightContainer.add(usernameTextField);
+	    
+	    y += 70;
+	    JLabel passwordLabel=new JLabel(service.get("userview.password"));
+	    passwordLabel.setBounds(50,y,150,30);
+	    this.passwordField=new JPasswordField();
+	    passwordField.setBounds(200,y,300,30);
+	    rightContainer.add(passwordLabel);
+	    rightContainer.add(passwordField);
+	    
+	    
+	    container.add(leftContainer,BorderLayout.WEST);
+	    container.add(rightContainer,BorderLayout.EAST);
+	    
+		container.add(buttonPanel,BorderLayout.SOUTH);
+	
+		panel.add(container, BorderLayout.CENTER);
+        
+        frame.getCenterPanel().removeAll();
+	    frame.getCenterPanel().add(panel,BorderLayout.CENTER);
+	    frame.getCenterPanel().revalidate();
+	    frame.getCenterPanel().repaint();
+	    frame.setVisible(true);
+	}
+	
+	public JTextField getNameTextField() {
+		return nameTextField;
+	}
+
+	public void setNameTextField(JTextField nameTextField) {
+		this.nameTextField = nameTextField;
+	}
+
+	public JTextField getEmailTextField() {
+		return emailTextField;
+	}
+
+	public void setEmailTextField(JTextField emailTextField) {
+		this.emailTextField = emailTextField;
+	}
+
+	public JTextField getUsernameTextField() {
+		return usernameTextField;
+	}
+
+	public void setUsernameTextField(JTextField usernameTextField) {
+		this.usernameTextField = usernameTextField;
+	}
+
+	public JPasswordField getPasswordField() {
+		return passwordField;
+	}
+
+	public void setPasswordField(JPasswordField passwordField) {
+		this.passwordField = passwordField;
+	}
+	
+	public JCheckBox getActiveCheckbox() {
+		return activeCheckbox;
+	}
+
+	public void setActiveCheckbox(JCheckBox activeCheckbox) {
+		this.activeCheckbox = activeCheckbox;
+	}
+
+	public void editUserView(UserModel userModel){
+		UsersController usersController = (UsersController)pm.getService("UsersController");
+		FrameController frameController = (FrameController)pm.getService("FrameController");
+		Frame frame = frameController.getView();
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.setPreferredSize(new Dimension(frame.getWidth()+frame.getConstCenterWidth()-250,frame.getHeight()+frame.getConstCenterHeight()-100));
+		
+		JPanel headerPanel = new JPanel(null);
+		headerPanel.setPreferredSize(new Dimension(panel.getWidth()-50,100));
+		
+		TextMessages service = ApplicationContextProvider.getContext().getBean(TextMessages.class);
+		
+		JLabel label = new JLabel(service.get("userview.edituser"),SwingConstants.CENTER);
+		label.setBounds((frame.getWidth()+frame.getConstCenterWidth()-250)/2-125,30,200,40);
+        label.setFont(new Font(label.getFont().getName(), Font.BOLD, 20));
+        headerPanel.add(label);
+        panel.add(headerPanel,BorderLayout.NORTH);
+        
+        //Content
+        JPanel buttonPanel = new JPanel(null);
+        
+        JButton save = new JButton(service.get("userview.saveuser"));
+        save.setActionCommand("saveuser");
+        System.out.println("action command saveuser");
+        save.addActionListener(usersController);
+        
+        save.setBounds((frame.getWidth()+frame.getConstCenterWidth()-250)/2-125,30,200,40);
+   
+        buttonPanel.add(save);
+        buttonPanel.setPreferredSize(new Dimension(panel.getWidth()-50,100));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        
+        JPanel container = new JPanel(new BorderLayout());
+        container.setPreferredSize(new Dimension((frame.getWidth()+frame.getConstCenterWidth()-250),frame.getHeight()+frame.getConstCenterHeight()-100));
+        JPanel leftContainer = new JPanel(null);
+        leftContainer.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        JPanel rightContainer = new JPanel(null);
+        rightContainer.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        leftContainer.setPreferredSize(new Dimension((frame.getWidth()/2)+frame.getConstCenterWidth()-100,frame.getHeight()+frame.getConstCenterHeight()-100));
+        rightContainer.setPreferredSize(new Dimension((frame.getWidth()/2)+frame.getConstCenterWidth()-50,frame.getHeight()+frame.getConstCenterHeight()-100));
+		int y = 150;
+		
+		JLabel nameLabel=new JLabel(service.get("userview.name"));
+		nameLabel.setBounds(50,y,150,30);
+		this.nameTextField=new JTextField();
+		nameTextField.setBounds(200,y,300,30);
+		nameTextField.setText(userModel.getName());
+		leftContainer.add(nameLabel);
+		leftContainer.add(nameTextField);
+	    
+	    y += 70;
+	    JLabel emailLabel=new JLabel(service.get("userview.email"));
+	    emailLabel.setBounds(50,y,150,30);
+	    this.emailTextField=new JTextField();
+	    emailTextField.setBounds(200,y,300,30);
+	    emailTextField.setText(userModel.getEmail());
+	    leftContainer.add(emailLabel);
+	    leftContainer.add(emailTextField);
+	    
+	    y += 70;
+	    JLabel activeLabel=new JLabel(service.get("userview.active"));
+	    activeLabel.setBounds(50,y,150,30);
+	    this.activeCheckbox=new JCheckBox();
+	    activeCheckbox.setBounds(195,y,200,30);
+	    activeCheckbox.setSelected(userModel.getActive());
+	    leftContainer.add(activeLabel);
+	    leftContainer.add(activeCheckbox);
+	    
+	    y = 150;
+	    JLabel usernameLabel=new JLabel(service.get("userview.username"));
+	    usernameLabel.setBounds(50,y,150,30);
+	    this.usernameTextField=new JTextField();
+	    usernameTextField.setBounds(200,y,300,30);
+	    usernameTextField.setText(userModel.getUsername());
+	    rightContainer.add(usernameLabel);
+	    rightContainer.add(usernameTextField);
+	    
+	    y += 70;
+	    JLabel passwordLabel=new JLabel(service.get("userview.password"));
+	    passwordLabel.setBounds(50,y,150,30);
+	    this.passwordField=new JPasswordField();
+	    passwordField.setBounds(200,y,300,30);
+//	    passwordField.setText(userModel.getPassword());
+	    rightContainer.add(passwordLabel);
+	    rightContainer.add(passwordField);
+	    
+	    container.add(leftContainer,BorderLayout.WEST);
+	    container.add(rightContainer,BorderLayout.EAST);
+	    
+		container.add(buttonPanel,BorderLayout.SOUTH);
+	
+		panel.add(container, BorderLayout.CENTER);
+        
+        frame.getCenterPanel().removeAll();
 	    frame.getCenterPanel().add(panel,BorderLayout.CENTER);
 	    frame.getCenterPanel().revalidate();
 	    frame.getCenterPanel().repaint();
