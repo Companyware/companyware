@@ -23,24 +23,29 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import core.Companyware;
+import models.user.UserModel;
 import pluginmanager.plugininterfaces.PluginManager;
 import pluginmanager.plugininterfaces.Service;
+import models.user.Repository;
 import plugins.core.frame.controller.FrameController;
 import plugins.core.frame.view.Frame;
 import plugins.core.frame.view.JOutlookBar;
-import plugins.core.users.model.UsersModel;
 import plugins.core.users.view.Users;
 
 public class UsersController extends Observable implements Service, MouseListener, ActionListener{
 
 	private static final Log log = LogFactory.getLog(UsersController.class);
-	private UsersModel model;
+	private UserModel model;
 	private Users view;
 	private PluginManager pm;
+	private String username;
 	
 	public UsersController(PluginManager pm) {
 		this.pm = pm;
-		this.model = new UsersModel();
+		this.model = new UserModel();
 		this.pm.registerService("UsersController",this);
 		view = new Users(pm);
 		model.addObserver(view);
@@ -51,11 +56,11 @@ public class UsersController extends Observable implements Service, MouseListene
 		JLabel label = (JLabel) event.getSource();
 		
 		switch (label.getName()) {
-			case "customeroverview":{
+			case "useroverview":{
 				this.createUsersOverview();
 				break;
 			}
-			case "addcustomer":{
+			case "adduser":{
 				this.createAddUserview();
 				break;
 			}
@@ -89,20 +94,49 @@ public class UsersController extends Observable implements Service, MouseListene
 		label.setBorder(BorderFactory.createEmptyBorder());
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		log.info("test action userscontroller");
+		String command = e.getActionCommand().toString();
+		UserModel user = null;
 		this.model.printOut("ACTION: " + e.getActionCommand().toString());
-		switch(e.getActionCommand().toString()) {
-	    case "Benutzerverwaltung":
-	    	{
+		
+		if(command.equals("adduser")){
+			user = new UserModel();
+		}
+		if(command.equals("saveuser")){
+			user = Repository.getUserByUsername(this.username);
+		}
+		if(command.equals("adduser")||command.equals("saveuser")){
+			if(user != null){
+				System.out.println("add and save in overview and detail");
+				user.setUsername(view.getUsernameTextField().getText());
+				user.setName(view.getNameTextField().getText());
+				user.setEmail(view.getEmailTextField().getText());
+				user.setActive(view.getActiveCheckbox().isSelected());
+				char[] pw = view.getPasswordField().getPassword();
+				String password = new String(pw);
+				String encryptedPassword = this.encoder().encode(password);
+				if(!password.isEmpty() && password != null){
+					user.setPassword(encryptedPassword);
+				}
+				Repository.save(user);
+				Companyware.getContainer().setSuccessMessage("Benutzer gespeichert!", pm);
+			}
+		}
+		if(command.equals("Benutzerverwaltung")){
 	    		this.createUsersOverview();
 	    		FrameController frameController = (FrameController)pm.getService("FrameController");
 	    		Frame frameView = (Frame)frameController.getView();
 	    		JOutlookBar outlookBar = frameView.getOutlookBar();
 	    		outlookBar.setVisibleBar(1);
-	    	}
 		}
+	}
+	
+	public void setUser(String username){
+		this.username = username;
+		model = Repository.getUserByUsername(username);
 	}
 	
 	public void createUsersOverview(){
@@ -110,10 +144,14 @@ public class UsersController extends Observable implements Service, MouseListene
 	}
 	
 	public void createAddUserview(){
-	//	view.addUserView();
+		view.addUserView();
 	}
 	
 	public void editCustomerView(){
-	//	view.editUserView(model);
+		view.editUserView(model);
+	}
+	
+	public BCryptPasswordEncoder encoder() {
+	    return new BCryptPasswordEncoder();
 	}
 }

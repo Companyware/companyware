@@ -147,6 +147,7 @@ public class PluginManagerImpl implements PluginManager {
             }
         }
 		core.Companyware.getContainer().checkFirstRun();
+		core.Companyware.getContainer().checkUpdate();
 		loadPlugins();
 	}
 	

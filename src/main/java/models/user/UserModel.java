@@ -13,6 +13,7 @@
  *******************************************************************************/
 package models.user;
 
+import java.util.Observable;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -29,12 +30,16 @@ import javax.persistence.Table;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import models.pluginsettings.PluginSettingsModel;
 import plugins.core.plugins.model.DisplayAs;
+import plugins.core.users.view.Users;
 
 @Entity
 @Table(name = "Users")
-public class UserModel {
+public class UserModel extends Observable{
 
 	public UserModel() {
 		// TODO Auto-generated constructor stub
@@ -43,10 +48,13 @@ public class UserModel {
     private Long id;
     private String name;
     private String username;
+    private String email;
     private String password;
     private Boolean active;
     private JCheckBox action;
     private JButton button;
+    
+    private static final Log log = LogFactory.getLog(UserModel.class);
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -76,6 +84,15 @@ public class UserModel {
         this.username = username;
     }
     
+    @DisplayAs(value = "user.email", index = 2, editable = false)
+    public String getEmail() {
+        return email;
+    }
+    
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    
     public String getPassword() {
         return password;
     }
@@ -84,7 +101,7 @@ public class UserModel {
         this.password = password;
     }
     
-    @DisplayAs(value = "user.active", index = 2, editable = true)
+    @DisplayAs(value = "user.active", index = 3, editable = true)
     public Boolean getActive() {
         return active;
     }
@@ -93,7 +110,7 @@ public class UserModel {
         this.active = active;
     }
     
-    @DisplayAs(value = "", index = 3, editable = true)
+    @DisplayAs(value = "", index = 4, editable = true)
     public JCheckBox getAction() {
         return action;
     }
@@ -102,7 +119,7 @@ public class UserModel {
         this.action = action;
     }
     
-    @DisplayAs(value = "", index = 4, editable = true)
+    @DisplayAs(value = "", index = 5, editable = true)
     public JButton getButton() {
 		return button;
 	}
@@ -115,5 +132,17 @@ public class UserModel {
     public String toString() {
         return String.format("UserModel Id: %d Name: %s Username: %d Active: %s", 
                 id, name, username, active);
-    } 
+    }
+
+	public void addObserver(Users view) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void printOut(String output){
+		log.info("user model");
+		log.info(output);
+        setChanged();
+        notifyObservers(this);
+	}
 }

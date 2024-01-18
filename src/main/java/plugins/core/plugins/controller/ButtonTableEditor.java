@@ -85,7 +85,6 @@ public class ButtonTableEditor extends DefaultCellEditor{
 			log.info(row);
 			log.info(col);
 			
-			
 	//		JOptionPane.showInputDialog(button, "Column with Value: "+table.getValueAt(row, 0) + " -  Clicked!");
 			Settings settings = new Settings();
 			settings.init(pm);

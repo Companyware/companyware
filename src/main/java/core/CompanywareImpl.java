@@ -16,6 +16,7 @@ package core;
 import java.awt.FlowLayout;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -28,6 +29,7 @@ import java.net.URL;
 import java.nio.file.FileSystems;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Properties;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -39,6 +41,7 @@ import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.xml.sax.SAXException;
+import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 
 import models.plugin.PluginModel;
 import models.settings.SettingsModel;
@@ -77,6 +80,58 @@ public class CompanywareImpl {
 		query.setParameter("name", pluginName);
 		plugin = (PluginModel) query.getSingleResult();
 		return plugin;
+	}
+	
+	public void checkUpdate(){
+		Query query= HibernateUtils.getSessionFactory().openSession().
+		        createQuery(""
+		        		+ "from SettingsModel s "
+		        		+ "where s.name=:name "
+		        		+ "");
+		SettingsModel settings = null;
+		query.setParameter("name", "version");
+		try {
+			settings = (SettingsModel) query.getSingleResult();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		DefaultArtifactVersion artifactDbVersion = null;
+		String dbVersion = "";
+		if(settings != null){
+			dbVersion = settings.getValue();
+			artifactDbVersion = new DefaultArtifactVersion(dbVersion);
+		}
+		
+		String appConfigPath = CompanywareImpl.class.getResource("/").getPath()+"application.properties";
+		Properties appProps = new Properties();
+		try {
+			appProps.load(new FileInputStream(appConfigPath));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String fileVersion = appProps.getProperty("companyware.version");
+		DefaultArtifactVersion artifactFileVersion = new DefaultArtifactVersion(fileVersion);
+		
+		if(dbVersion == "" && fileVersion != null){
+			settings = new SettingsModel();
+			settings.setName("version");
+			settings.setValue(fileVersion);
+			Repository.save(settings);
+			artifactDbVersion = new DefaultArtifactVersion(fileVersion);
+		}
+		
+		if (artifactDbVersion.compareTo(artifactFileVersion)<0){
+			settings.setName("version");
+			settings.setValue(fileVersion);
+			Repository.save(settings);
+			//update
+			this.executeUpdateSql(fileVersion);
+		}
 	}
 	
 	public void checkFirstRun(){
@@ -149,6 +204,7 @@ public class CompanywareImpl {
 		UserModel user = new UserModel();
 		user.setName("companyware");
 		user.setUsername("companyware");
+		user.setEmail("info@companyware.de");
 		String encryptedPassword = this.encoder().encode("companyware");
 		user.setPassword(encryptedPassword);
 		models.user.Repository.save(user);
@@ -182,9 +238,9 @@ public class CompanywareImpl {
 		}
 	}
 	
-	public void executeUpdateSql(){
+	public void executeUpdateSql(String fileVersion){
 		InputStream is = getClass().getClassLoader()
-                .getResourceAsStream("setup/update.sql");
+                .getResourceAsStream("setup/update"+fileVersion+".sql");
 		if(is != null){
 			BufferedReader br = new BufferedReader(new InputStreamReader(is));
 			
