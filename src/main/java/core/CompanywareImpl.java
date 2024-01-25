@@ -23,10 +23,17 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Properties;
@@ -37,7 +44,9 @@ import javax.swing.JPanel;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
 import org.hibernate.query.Query;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.xml.sax.SAXException;
@@ -82,6 +91,26 @@ public class CompanywareImpl {
 		return plugin;
 	}
 	
+	public String getVersionNumber(){
+		String version = "";
+		Query query= HibernateUtils.getSessionFactory().openSession().
+		        createQuery(""
+		        		+ "from SettingsModel s "
+		        		+ "where s.name=:name "
+		        		+ "");
+		SettingsModel settings = null;
+		query.setParameter("name", "version");
+		try {
+			settings = (SettingsModel) query.getSingleResult();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		if(settings != null){
+			version = settings.getValue();
+		}
+		return version;
+	}
+	
 	public void checkUpdate(){
 		Query query= HibernateUtils.getSessionFactory().openSession().
 		        createQuery(""
@@ -103,10 +132,30 @@ public class CompanywareImpl {
 			artifactDbVersion = new DefaultArtifactVersion(dbVersion);
 		}
 		
-		String appConfigPath = CompanywareImpl.class.getResource("/").getPath()+"application.properties";
+		Path temp = null;
+		try {
+			temp = Files.createTempFile("application-", ".properties");
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		try {
+			Files.copy(getClass().getClassLoader().getResourceAsStream("application.properties"), temp, StandardCopyOption.REPLACE_EXISTING);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		FileInputStream input = null;
+		try {
+			input = new FileInputStream(temp.toFile());
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		Properties appProps = new Properties();
 		try {
-			appProps.load(new FileInputStream(appConfigPath));
+			appProps.load(input);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -115,6 +164,7 @@ public class CompanywareImpl {
 			e.printStackTrace();
 		}
 		String fileVersion = appProps.getProperty("companyware.version");
+		System.out.println("fileVersion:"+fileVersion);
 		DefaultArtifactVersion artifactFileVersion = new DefaultArtifactVersion(fileVersion);
 		
 		if(dbVersion == "" && fileVersion != null){

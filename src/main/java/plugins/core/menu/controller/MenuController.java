@@ -17,7 +17,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import core.ApplicationContextProvider;
+import core.TextMessages;
 import plugins.core.frame.controller.FrameController;
+import plugins.core.info.controller.InfoController;
+import plugins.core.login.controller.LoginController;
 import plugins.core.menu.model.*;
 import pluginmanager.plugininterfaces.PluginManager;
 import pluginmanager.plugininterfaces.Service;
@@ -40,7 +45,7 @@ public class MenuController implements ActionListener, Service{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		this.model.printOut("ACTION: " + e.getActionCommand().toString());
+		this.model.printOut("menu ACTION: " + e.getActionCommand().toString());
 		String command = e.getActionCommand().toString();
 		if(command.equals("exit")){
 			FrameController frameController = (FrameController)pm.getService("FrameController");
@@ -48,6 +53,14 @@ public class MenuController implements ActionListener, Service{
 				frameController.getView().setVisible(false);
 				System.exit(0);
 			}
+		}
+		
+		TextMessages service = ApplicationContextProvider.getContext().getBean(TextMessages.class);
+		
+		if(command.equals(service.get("menu.about"))){
+			System.out.println("set visible");
+			InfoController infoController = (InfoController)pm.getService("InfoController");
+			infoController.getView().setVisible(true);
 		}
 	}
 }
