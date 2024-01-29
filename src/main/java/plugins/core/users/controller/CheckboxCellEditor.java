@@ -21,6 +21,12 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import core.ApplicationContextProvider;
+import core.TextMessages;
+import models.user.Repository;
+import models.user.UserModel;
+
 import java.awt.FlowLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -66,11 +72,17 @@ public class CheckboxCellEditor extends DefaultCellEditor{
 	
 	public Object getCellEditorValue()
 	{
-//		String pluginName = (String)table.getValueAt(row, 0);
-//		PluginModel plugin = Companyware.getContainer().getPluginByName(pluginName);
-//		plugin.setActive(this.isSelected);
-//		Repository.save(plugin);
+		TextMessages service = ApplicationContextProvider.getContext().getBean(TextMessages.class);
+		int usernameColumnIndex = this.getColumnIndex(table, service.get("userview.username"));
+		
+		String username = (String)table.getValueAt(row,usernameColumnIndex);
+	
+		UserModel user = Repository.getUserByUsername(username);
+		user.setActive(this.isSelected);
+		Repository.save(user);
+		
 		Object object = super.getCellEditorValue();
+		
 		this.setSuccessMessage(this.isSelected);
 		return object;
 	}
@@ -86,5 +98,12 @@ public class CheckboxCellEditor extends DefaultCellEditor{
 		bottom.add(labelBottom);
 		bottom.revalidate();
 		bottom.repaint();
+	}
+	
+	private int getColumnIndex (JTable table, String header) {
+	    for (int i=0; i < table.getColumnCount(); i++) {
+	        if (table.getColumnName(i).equals(header)) return i;
+	    }
+	    return -1;
 	}
 }

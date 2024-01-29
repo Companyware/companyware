@@ -11,50 +11,37 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
-package models.user;
+package plugins.community.companywaredemo.model;
 
-import java.util.Observable;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import models.pluginsettings.PluginSettingsModel;
 import plugins.core.plugins.model.DisplayAs;
-import plugins.core.users.view.Users;
 
 @Entity
-@Table(name = "Users")
-public class UserModel extends Observable{
+@Table(name = "Demo")
+public class DemoModel {
 
-	public UserModel() {
+	public DemoModel() {
 		// TODO Auto-generated constructor stub
 	}
 	
     private Long id;
+    private String salutation;
     private String name;
-    private String username;
-    private String email;
-    private String password;
-    private Boolean active;
+    private String firstname;
+    private String street;
+    private String streetnumber;
+    private String zipcode;
+    private String city;
+    private String country;
     private JCheckBox action;
     private JButton button;
-    
-    private static final Log log = LogFactory.getLog(UserModel.class);
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -65,8 +52,17 @@ public class UserModel extends Observable{
     public void setId(Long id) {
         this.id = id;
     }
+    
+    @DisplayAs(value = "demo.salutation", index = 0, editable = false)
+    public String getSalutation() {
+        return salutation;
+    }
+    
+    public void setSalutation(String salutation) {
+        this.salutation = salutation;
+    }
 
-    @DisplayAs(value = "user.name", index = 0, editable = false)
+    @DisplayAs(value = "demo.name", index = 1, editable = false)
     public String getName() {
         return name;
     }
@@ -75,42 +71,61 @@ public class UserModel extends Observable{
         this.name = name;
     }
     
-    @DisplayAs(value = "user.username", index = 1, editable = false)
-    public String getUsername() {
-        return username;
+    @DisplayAs(value = "demo.firstname", index = 2, editable = false)
+    public String getFirstname() {
+        return firstname;
     }
     
-    public void setUsername(String username) {
-        this.username = username;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
     }
     
-    @DisplayAs(value = "user.email", index = 2, editable = false)
-    public String getEmail() {
-        return email;
+    @DisplayAs(value = "demo.street", index = 3, editable = false)
+    public String getStreet() {
+        return street;
     }
     
-    public void setEmail(String email) {
-        this.email = email;
+    public void setStreet(String street) {
+        this.street = street;
+    }
+  
+    @DisplayAs(value = "demo.streetnumber", index = 4, editable = false)
+    public String getStreetnumber() {
+        return streetnumber;
     }
     
-    public String getPassword() {
-        return password;
+    public void setStreetnumber(String streetnumber) {
+        this.streetnumber = streetnumber;
     }
     
-    public void setPassword(String password) {
-        this.password = password;
+    @DisplayAs(value = "demo.zipcode", index = 5, editable = false)
+    public String getZipcode() {
+        return zipcode;
     }
     
-    @DisplayAs(value = "user.active", index = 3, editable = true)
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
+    public void setZipcode(String zipcode) {
+        this.zipcode = zipcode;
     }
     
-    @DisplayAs(value = "", index = 4, editable = true)
+    @DisplayAs(value = "demo.city", index = 6, editable = false)
+    public String getCity() {
+        return city;
+    }
+    
+    public void setCity(String city) {
+        this.city = city;
+    }
+    
+    @DisplayAs(value = "demo.country", index = 7, editable = false)
+    public String getCountry() {
+        return country;
+    }
+    
+    public void setCountry(String country) {
+        this.country = country;
+    }
+    
+    @DisplayAs(value = "", index = 8, editable = true)
     public JCheckBox getAction() {
         return action;
     }
@@ -119,7 +134,7 @@ public class UserModel extends Observable{
         this.action = action;
     }
     
-    @DisplayAs(value = "", index = 5, editable = true)
+    @DisplayAs(value = "", index = 9, editable = true)
     public JButton getButton() {
 		return button;
 	}
@@ -130,19 +145,7 @@ public class UserModel extends Observable{
     
     @Override
     public String toString() {
-        return String.format("UserModel Id: %d Name: %s Username: %d Active: %s", 
-                id, name, username, active);
+        return String.format("DemoModel Id: %d Name: %s Firstname: %d City: %s", 
+                id, name, firstname, city);
     }
-
-	public void addObserver(Users view) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void printOut(String output){
-		log.info("user model");
-		log.info(output);
-        setChanged();
-        notifyObservers(this);
-	}
 }

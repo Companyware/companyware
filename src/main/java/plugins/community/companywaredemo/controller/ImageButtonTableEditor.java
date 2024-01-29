@@ -11,7 +11,7 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
-package plugins.core.users.controller;
+package plugins.community.companywaredemo.controller;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -25,38 +25,33 @@ import javax.swing.JCheckBox;
 import javax.swing.JTable;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import core.ApplicationContextProvider;
-import core.TextMessages;
-
 import java.io.*;
 import java.net.URL;
-
 import pluginmanager.plugininterfaces.PluginManager;
 import plugins.core.users.view.WhiteButton;
 
-public class ButtonTableEditor extends DefaultCellEditor{
+public class ImageButtonTableEditor extends DefaultCellEditor{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private static final Log log = LogFactory.getLog(ButtonTableEditor.class);
+	private static final Log log = LogFactory.getLog(ImageButtonTableEditor.class);
 	
 	private JButton button;
 	private String label;
 	private boolean clicked;
 	private int row, col;
-	private ImageIcon icon;
 	private JTable table;
 	private PluginManager pm;
+	private ImageIcon icon;
 
-	public ButtonTableEditor(JCheckBox checkBox, PluginManager pm)
+	public ImageButtonTableEditor(JCheckBox checkBox, PluginManager pm)
 	{
 		super(checkBox);
 		this.pm = pm;
 		button = new WhiteButton();
-		URL url = getClass().getResource("/small_edit.png");
+		URL url = getClass().getResource("/delete2.png");
     	BufferedImage img = null;
 		try {
 			img = ImageIO.read(url);
@@ -67,16 +62,15 @@ public class ButtonTableEditor extends DefaultCellEditor{
     	this.icon = new ImageIcon(img);
     	button.setIcon(this.icon);
 		button.setBackground(Color.white);
-		button.setBorderPainted(false);
 		button.setActionCommand("button renderer");
 		button.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				button.setForeground(Color.black);
+				button.setForeground(Color.white);
 				button.setBackground(Color.white);
-				log.info("button action");
+				log.info("delete action");
 				log.info("ACTION: " + e.getActionCommand().toString());
 				fireEditingStopped();
 			}
@@ -90,6 +84,7 @@ public class ButtonTableEditor extends DefaultCellEditor{
 		
 		label = (value == null) ? "" : value.toString();
 		button.setIcon(this.icon);
+		button.setBackground(Color.white);
 		clicked = true;
 		return button;
 	}
@@ -99,17 +94,7 @@ public class ButtonTableEditor extends DefaultCellEditor{
 		{
 			log.info(row);
 			log.info(col);
-			
-			log.info("user edit");
-			TextMessages service = ApplicationContextProvider.getContext().getBean(TextMessages.class);
-			int usernameColumnIndex = this.getColumnIndex(table, service.get("userview.username"));
-		
-			log.info(row);
-			log.info(col);
-		
-			UsersController usersController = (UsersController)pm.getService("UsersController");
-			usersController.setUser((String)table.getValueAt(row,usernameColumnIndex));
-			usersController.editCustomerView();
+			log.info("delete");
 		}
 		clicked = false;
 		log.info(label);
