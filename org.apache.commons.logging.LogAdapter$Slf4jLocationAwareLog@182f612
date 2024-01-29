@@ -1,2 +1,3 @@
-Tue Apr 14 01:14:47 CEST 2020 : Horchen auf Port 1527 auf Host 127.0.0.1 nicht möglich:
- java.net.BindException: Address already in use: JVM_Bind
+version https://git-lfs.github.com/spec/v1
+oid sha256:f6f69d32c26323d53996d1eb360e3a63dd0ff09fd946d16c436dde44b7c81417
+size 148

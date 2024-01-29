@@ -1,24 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<launch4jConfig>
-  <dontWrapJar>false</dontWrapJar>
-  <headerType>gui</headerType>
-  <jar>D:\companyware-desktop\CompanywareDesktop\target\Companyware.jar</jar>
-  <outfile>D:\companyware-desktop\CompanywareDesktop\target\Companyware.exe</outfile>
-  <errTitle></errTitle>
-  <cmdLine></cmdLine>
-  <chdir>.</chdir>
-  <priority>normal</priority>
-  <downloadUrl></downloadUrl>
-  <supportUrl></supportUrl>
-  <stayAlive>false</stayAlive>
-  <restartOnCrash>false</restartOnCrash>
-  <manifest></manifest>
-  <icon></icon>
-  <jre>
-    <path>target\jre\bin\javaw.exe</path>
-    <requiresJdk>false</requiresJdk>
-    <requires64Bit>false</requires64Bit>
-    <minVersion>1.8.0</minVersion>
-    <maxVersion>1.9.0</maxVersion>
-  </jre>
-</launch4jConfig>
+version https://git-lfs.github.com/spec/v1
+oid sha256:19f4f99e146e6715698f0139af9bcdf56f7339ed4da0ef73a72569e26c1bfc7c
+size 775
