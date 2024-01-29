@@ -133,6 +133,11 @@
             <type>tgz</type>
             <version>1.8.0_131</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-artifact</artifactId>
+            <version>3.0.3</version>
+        </dependency>
   </dependencies>
   <repositories>
        <repository>
