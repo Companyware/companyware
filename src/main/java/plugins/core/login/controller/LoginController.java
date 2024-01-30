@@ -43,6 +43,7 @@ public class LoginController implements ActionListener, Service, WindowListener,
 	/**
 	 * 
 	 * 
+	 * 
 	 */
 	public LoginController(PluginManager pm) {
 		pm.registerService("LoginController",this);
