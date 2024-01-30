@@ -1,3 +1,255 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:4e5073f388e44b3449d50f744409b12a3e24a05aa5e1de16801d548006f6fe03
-size 9542
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>Companyware</groupId>
+  <artifactId>Companyware</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>Companyware</name>
+  <url>http://maven.apache.org</url>
+
+   <properties>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+      <maven.compiler.source>1.8</maven.compiler.source>
+      <maven.compiler.target>1.8</maven.compiler.target>
+      <spring-version>5.1.6.RELEASE</spring-version>
+      <start-class>Companyware</start-class>
+  </properties>
+  
+  <parent>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-parent</artifactId>
+      <version>2.1.9.RELEASE</version>
+  </parent>
+  
+  <dependencies>
+      <!-- Spring framework -->
+       <dependency>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring-context</artifactId>
+          <version>${spring-version}</version>
+      </dependency>
+      
+      <dependency>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring-beans</artifactId>
+          <version>${spring-version}</version>
+      </dependency>
+
+      <dependency>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring-core</artifactId>
+          <version>${spring-version}</version>
+      </dependency>
+      
+       <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>${spring-version}</version>
+        </dependency>
+      
+      <dependency>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter</artifactId>
+      </dependency>
+      
+      <dependency>
+          <groupId>org.apache.derby</groupId>
+          <artifactId>derbyclient</artifactId>
+          <version>10.12.1.1</version>
+      </dependency>
+      <dependency>
+          <groupId>org.apache.derby</groupId>
+          <artifactId>derbytools</artifactId>
+          <version>10.12.1.1</version>
+          <scope>runtime</scope>
+      </dependency>
+      <dependency>
+          <groupId>org.apache.derby</groupId>
+          <artifactId>derbynet</artifactId>
+          <version>10.12.1.1</version>
+      </dependency>
+    
+      <dependency>
+          <groupId>org.hibernate</groupId>
+          <artifactId>hibernate-core</artifactId>
+          <version>5.2.2.Final</version>
+      </dependency>
+      
+      <dependency>
+ 		 <groupId>com.github.v-ladynev</groupId>
+ 		 <artifactId>fluent-hibernate-core</artifactId>
+ 		 <version>0.3.1</version>
+	  </dependency>
+      
+      <!-- Log4j -->
+	  <dependency>
+		  <groupId>log4j</groupId>
+		  <artifactId>log4j</artifactId>
+		  <version>1.2.17</version>
+	  </dependency>
+	  <dependency>
+           <groupId>commons-logging</groupId>
+           <artifactId>commons-logging</artifactId>
+           <version>1.1.3</version>
+      </dependency>
+      <dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.formdev</groupId>
+			<artifactId>flatlaf</artifactId>
+			<version>1.0-rc3</version>
+		</dependency>
+		<dependency>
+        	<groupId>commons-io</groupId>
+        	<artifactId>commons-io</artifactId>
+        	<version>2.1</version>
+    	</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.12.0</version>
+		</dependency>
+		<dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>1.7</version>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle.java</groupId>
+            <artifactId>jre</artifactId>
+            <classifier>win32</classifier>
+            <type>tgz</type>
+            <version>1.8.0_131</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-artifact</artifactId>
+            <version>3.0.3</version>
+        </dependency>
+  </dependencies>
+  <repositories>
+       <repository>
+           <!-- this repository has the JRE tgz -->
+           <id>alfresco</id>
+           <url>https://artifacts.alfresco.com/nexus/content/repositories/public/</url>
+       </repository>
+  </repositories>
+  <build>
+      <finalName>${project.artifactId}</finalName>
+      <resources>
+          <resource>
+              <directory>src/main/java</directory>
+              <includes>                      
+                  <include>**/*.xml</include>
+       			  <include>**/*.properties</include>
+       			  <include>**/*.sql</include>
+              </includes>
+          </resource>
+          <resource>
+              <directory>src/main/resources</directory>
+          </resource>
+      </resources>
+      <plugins>
+            <plugin>
+        		<groupId>org.springframework.boot</groupId>
+        		<artifactId>spring-boot-maven-plugin</artifactId>
+        		<configuration>
+           			<fork>true</fork>
+            		<mainClass>${start-class}</mainClass>
+        		</configuration>
+          		<executions>
+            		<execution>
+              			<goals>
+                			<goal>repackage</goal>
+              			</goals>
+            		</execution>
+        		</executions>
+    		</plugin>
+	</plugins>
+  </build>
+  
+  <profiles>
+        <profile>
+            <id>windows-exe</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                		<!-- this is to extract the JRE tgz file we downloaded -->
+                		<groupId>org.apache.maven.plugins</groupId>
+                		<artifactId>maven-dependency-plugin</artifactId>
+                		<version>2.5.1</version>
+                		<executions>
+                    		<execution>
+                        		<phase>generate-resources</phase>
+                        		<goals>
+                            		<goal>unpack-dependencies</goal>
+                        		</goals>
+                        		<configuration>
+                            		<includeGroupIds>com.oracle.java</includeGroupIds>
+                            		<includeTypes>tgz</includeTypes>
+                            		<includeArtifactIds>jre</includeArtifactIds>
+                            		<includeClassifiers>win32</includeClassifiers>
+                            		<outputDirectory>target/win32</outputDirectory>
+                        		</configuration>
+                    		</execution>
+                		</executions>
+            		</plugin>
+            		<plugin>
+                		<!-- This calls launch4j to create the program EXE -->
+                		<groupId>com.akathist.maven.plugins.launch4j</groupId>
+                		<artifactId>launch4j-maven-plugin</artifactId>
+                		<executions>
+                    		<execution>
+                        		<id>l4j-clui</id>
+                        		<phase>package</phase>
+                        		<goals>
+                            		<goal>launch4j</goal>
+                        		</goals>
+                        		<configuration>
+                            		<headerType>gui</headerType>
+                            		<outfile>target/Companyware.exe</outfile>
+                            		<jar>target/Companyware.jar</jar>
+                            		<errTitle>error</errTitle>
+                            		<classPath>                    
+   										<mainClass>org.springframework.boot.loader.JarLauncher</mainClass>                                
+   										<addDependencies>true</addDependencies>
+   										<preCp>anything</preCp>
+									</classPath>
+                            		<jre>
+                                		<path>./win32/java</path>
+                            		</jre>
+                            		<versionInfo>
+                                		<fileVersion>1.2.3.4</fileVersion>
+                                		<txtFileVersion>txt file version?</txtFileVersion>
+                                		<fileDescription>a description</fileDescription>
+                                		<copyright>my copyright</copyright>
+                                		<productVersion>4.3.2.1</productVersion>
+                                		<txtProductVersion>txt product version</txtProductVersion>
+                                		<productName>Companyware</productName>
+                                		<internalName>Companyware</internalName>
+                                		<originalFilename>Companyware.exe</originalFilename>
+                            		</versionInfo>
+                        		</configuration>
+                    		</execution>
+                		</executions>
+            		</plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>
