@@ -17,12 +17,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import core.ApplicationContextProvider;
 import core.TextMessages;
 import plugins.core.frame.controller.FrameController;
 import plugins.core.info.controller.InfoController;
-import plugins.core.login.controller.LoginController;
 import plugins.core.menu.model.*;
 import pluginmanager.plugininterfaces.PluginManager;
 import pluginmanager.plugininterfaces.Service;
