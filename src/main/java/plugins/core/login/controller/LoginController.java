@@ -13,6 +13,7 @@
  *******************************************************************************/
 package plugins.core.login.controller;
 
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -20,6 +21,10 @@ import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import core.Companyware;
@@ -34,6 +39,7 @@ public class LoginController implements ActionListener, Service, WindowListener,
 	private static final Log log = LogFactory.getLog(LoginController.class);
 	private LoginView view; 
 	private FrameController frameController;
+	private PluginManager pm;
 	/**
 	 * 
 	 */
@@ -43,6 +49,7 @@ public class LoginController implements ActionListener, Service, WindowListener,
 		JFrame frame =  frameController.getView();
 		this.view = new LoginView(pm, frame);
 		this.view.setContent();
+		this.pm = pm;
 	}
 	public LoginView getView() {
 		return view;
@@ -100,6 +107,9 @@ public class LoginController implements ActionListener, Service, WindowListener,
 				this.view.setVisible(false);
 				this.view.dispose();
 			}
+			else{
+				this.setFailureMessage();
+			}
 		}
 		if(command.equals("Abbrechen")){
 			Frame frame =  frameController.getView();
@@ -119,7 +129,10 @@ public class LoginController implements ActionListener, Service, WindowListener,
 
 	public boolean checkUser(String userName, String password){
 		try {
-			UserModel user = models.user.Repository.getUserByUsername(userName);
+			UserModel user = models.user.Repository.getActiveUserByUsername(userName);
+			if(user == null){
+				return false;
+			}
 			if(Companyware.getContainer().encoder().matches(password, user.getPassword())){
 				return true;
 			}
@@ -142,10 +155,26 @@ public class LoginController implements ActionListener, Service, WindowListener,
 				this.view.setVisible(false);
 				this.view.dispose();
 			}
+			else{
+				this.setFailureMessage();
+			}
 		}
 	}
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
+	}
+	
+	public void setFailureMessage(){
+		FrameController frameController = (FrameController)pm.getService("FrameController");
+		JPanel bottom = frameController.getView().getBottomPanel();
+		String message = "Benutzer und/oder Passwort falsch!";
+	    JLabel labelBottom = new JLabel(message);
+	    JOptionPane.showMessageDialog(frameController.getView(), message, "Info", JOptionPane.INFORMATION_MESSAGE);
+		bottom.setLayout(new FlowLayout(FlowLayout.LEFT));
+		bottom.removeAll();
+		bottom.add(labelBottom);
+		bottom.revalidate();
+		bottom.repaint();
 	}
 }

@@ -255,6 +255,7 @@ public class CompanywareImpl {
 		user.setName("companyware");
 		user.setUsername("companyware");
 		user.setEmail("info@companyware.de");
+		user.setActive(true);
 		String encryptedPassword = this.encoder().encode("companyware");
 		user.setPassword(encryptedPassword);
 		models.user.Repository.save(user);

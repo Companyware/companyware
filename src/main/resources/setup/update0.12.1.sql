@@ -1,0 +1,1 @@
+UPDATE USERS SET active = true WHERE username = 'companyware';
