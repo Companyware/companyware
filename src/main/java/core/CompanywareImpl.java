@@ -19,9 +19,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -29,6 +31,10 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Properties;
 
@@ -38,6 +44,9 @@ import javax.swing.JPanel;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
 import org.hibernate.query.Query;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.xml.sax.SAXException;
@@ -144,10 +153,9 @@ public class CompanywareImpl {
 			e1.printStackTrace();
 		}
 		
-		String appConfigPath = CompanywareImpl.class.getResource("/").getPath()+"application.properties";
 		Properties appProps = new Properties();
 		try {
-			appProps.load(new FileInputStream(appConfigPath));
+			appProps.load(input);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -156,6 +164,7 @@ public class CompanywareImpl {
 			e.printStackTrace();
 		}
 		String fileVersion = appProps.getProperty("companyware.version");
+		System.out.println("fileVersion:"+fileVersion);
 		DefaultArtifactVersion artifactFileVersion = new DefaultArtifactVersion(fileVersion);
 		
 		if(dbVersion == "" && fileVersion != null){

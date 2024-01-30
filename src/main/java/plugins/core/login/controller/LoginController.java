@@ -24,6 +24,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import core.Companyware;
