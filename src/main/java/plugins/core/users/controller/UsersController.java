@@ -110,7 +110,6 @@ public class UsersController extends Observable implements Service, MouseListene
 		}
 		if(command.equals("adduser")||command.equals("saveuser")){
 			if(user != null){
-				System.out.println("add and save in overview and detail");
 				user.setUsername(view.getUsernameTextField().getText());
 				user.setName(view.getNameTextField().getText());
 				user.setEmail(view.getEmailTextField().getText());

@@ -164,7 +164,6 @@ public class CompanywareImpl {
 			e.printStackTrace();
 		}
 		String fileVersion = appProps.getProperty("companyware.version");
-		System.out.println("fileVersion:"+fileVersion);
 		DefaultArtifactVersion artifactFileVersion = new DefaultArtifactVersion(fileVersion);
 		
 		if(dbVersion == "" && fileVersion != null){

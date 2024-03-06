@@ -319,7 +319,6 @@ public class Users  implements Observer {
         
         JButton save = new JButton(service.get("userview.saveuser"));
         save.setActionCommand("saveuser");
-        System.out.println("action command saveuser");
         save.addActionListener(usersController);
         
         save.setBounds((frame.getWidth()+frame.getConstCenterWidth()-250)/2-125,30,200,40);

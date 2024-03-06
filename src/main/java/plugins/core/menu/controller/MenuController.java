@@ -58,7 +58,6 @@ public class MenuController implements ActionListener, Service{
 		TextMessages service = ApplicationContextProvider.getContext().getBean(TextMessages.class);
 		
 		if(command.equals(service.get("menu.about"))){
-			System.out.println("set visible");
 			InfoController infoController = (InfoController)pm.getService("InfoController");
 			infoController.getView().setVisible(true);
 		}
