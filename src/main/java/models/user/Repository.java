@@ -17,7 +17,6 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
-<<<<<<< HEAD
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
@@ -55,32 +54,6 @@ public class Repository {
         	Criterion restUsername = Restrictions.eq("username", username);
         	Criterion restActive = Restrictions.eq("active", true); 
         	user = (UserModel) criteria.add(Restrictions.and(restUsername, restActive))
-=======
-import org.hibernate.criterion.Restrictions;
-import org.hibernate.query.Query;
-
-import models.user.UserModel;
-
-import core.HibernateUtils;
-
-public class Repository {
-    
-    private Repository() {};
-    
-    public static UserModel getUserById(Long id) {
-        UserModel user;
-        try (Session session = HibernateUtils.getSessionFactory().openSession()) {
-            user = session.get(UserModel.class, id);
-        }
-        return user;
-    }  
-    
-    public static UserModel getUserByUsername(String username) {
-        UserModel user;
-        try (Session session = HibernateUtils.getSessionFactory().openSession()) {
-        	Criteria criteria = session.createCriteria(UserModel.class);
-        	user = (UserModel) criteria.add(Restrictions.eq("username", username))
->>>>>>> refs/remotes/origin/main
         	                             .uniqueResult();
         }
         return user;
