@@ -17,6 +17,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+<<<<<<< HEAD
 
 import core.ApplicationContextProvider;
 import core.TextMessages;
@@ -60,6 +61,39 @@ public class MenuController implements ActionListener, Service{
 		if(command.equals(service.get("menu.about"))){
 			InfoController infoController = (InfoController)pm.getService("InfoController");
 			infoController.getView().setVisible(true);
+=======
+import plugins.core.frame.controller.FrameController;
+import plugins.core.menu.model.*;
+import pluginmanager.plugininterfaces.PluginManager;
+import pluginmanager.plugininterfaces.Service;
+import plugins.core.menu.view.Menu;
+
+public class MenuController implements ActionListener, Service{
+
+	private MenuModel model;
+	private PluginManager pm;
+	
+	private static final Log log = LogFactory.getLog(MenuController.class);
+
+	public MenuController(PluginManager pm) {
+		this.model = new MenuModel();
+		this.pm = pm;
+		pm.registerService("MenuController",this);
+		Menu view = new Menu(pm);
+		model.addObserver(view);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		this.model.printOut("ACTION: " + e.getActionCommand().toString());
+		String command = e.getActionCommand().toString();
+		if(command.equals("exit")){
+			FrameController frameController = (FrameController)pm.getService("FrameController");
+			if(frameController!=null){
+				frameController.getView().setVisible(false);
+				System.exit(0);
+			}
+>>>>>>> refs/remotes/origin/main
 		}
 	}
 }
