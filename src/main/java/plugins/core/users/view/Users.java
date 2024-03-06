@@ -314,7 +314,7 @@ public class Users  implements Observer {
         headerPanel.add(label);
         panel.add(headerPanel,BorderLayout.NORTH);
         
-        //Content 
+        //Content
         JPanel buttonPanel = new JPanel(null);
         
         JButton save = new JButton(service.get("userview.saveuser"));
